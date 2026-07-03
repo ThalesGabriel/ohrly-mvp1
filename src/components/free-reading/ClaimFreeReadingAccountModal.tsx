@@ -304,7 +304,7 @@ export function ClaimFreeReadingAccountModal({
 
                             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
                                 <a
-                                    href="/dashboard?claimed=1"
+                                    href="/home?claimed=1"
                                     className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-700 px-5 py-3 text-sm font-black text-white transition hover:bg-emerald-800"
                                 >
                                     Ir para minha área

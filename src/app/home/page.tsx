@@ -197,6 +197,7 @@ const productGroupConfig = [
 export default function DailyReadingPage() {
     const [usesClaimedFreeReadingData, setUsesClaimedFreeReadingData] = useState(false);
     const [pendingFile, setPendingFile] = useState<File | null>(null);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [mappingModalOpen, setMappingModalOpen] = useState(false);
     const [columnPreview, setColumnPreview] = useState<ColumnPreview[]>([]);
     const [claimAccountModalOpen, setClaimAccountModalOpen] = useState(false);
@@ -214,7 +215,7 @@ export default function DailyReadingPage() {
     const [sessionToken, setSessionToken] = useState<string | null>(null);
     const [hasResolvedSessionMode, setHasResolvedSessionMode] = useState(false);
 
-    const isFreeReadingSession = hasResolvedSessionMode && Boolean(sessionToken);
+    const isFreeReadingSession = hasResolvedSessionMode && Boolean(sessionToken) && !isAuthenticated;
 
     const [selectedDate, setSelectedDate] = useState("");
     const [fileName, setFileName] = useState("base histórica");
@@ -240,10 +241,35 @@ export default function DailyReadingPage() {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
+        async function resolveSessionMode() {
+            const params = new URLSearchParams(window.location.search);
+            const urlSessionToken = params.get("session");
 
-        setSessionToken(params.get("session"));
-        setHasResolvedSessionMode(true);
+            const {
+                data: { user },
+            } = await supabase.auth.getUser();
+
+            const loggedIn = Boolean(user);
+
+            setIsAuthenticated(loggedIn);
+
+            if (loggedIn) {
+                setSessionToken(null);
+
+                if (urlSessionToken) {
+                    const cleanUrl = `${window.location.pathname}${params.has("claimed") ? "?claimed=1" : ""
+                        }`;
+
+                    window.history.replaceState(null, "", cleanUrl);
+                }
+            } else {
+                setSessionToken(urlSessionToken);
+            }
+
+            setHasResolvedSessionMode(true);
+        }
+
+        resolveSessionMode();
     }, []);
 
     function handleOpenPaidPlanModal(policy: PolicyReading) {
@@ -787,6 +813,8 @@ export default function DailyReadingPage() {
                 setSessionToken(null);
                 setFreeReadingReady(false);
                 setUsesClaimedFreeReadingData(true);
+
+                window.history.replaceState(null, "", "/home?claimed=1");
 
                 router.replace("/home?claimed=1");
                 router.refresh();

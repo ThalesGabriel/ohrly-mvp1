@@ -36,8 +36,8 @@ type DiagnosticListItem = {
 const diagnostics: DiagnosticListItem[] = [
   {
     id: "7bfd2ba4-6faf-48e1-9e74-20aa779355a8",
-    storeName: "Recife Moto Parts",
-    segmentKey: "motopecas_acessorios",
+    storeName: "Nome da loja",
+    segmentKey: "Segmento",
     analyzedPeriod: "2024-01-01 a 2025-05-31",
     reportDate: "2025-05-31",
     status: "COMPLETED",
@@ -48,8 +48,8 @@ const diagnostics: DiagnosticListItem[] = [
   },
   {
     id: "5785fea2-7220-47b5-8497-8b1662571ce4",
-    storeName: "Recife Moto Parts",
-    segmentKey: "motopecas_acessorios",
+    storeName: "Nome da loja",
+    segmentKey: "Segmento",
     analyzedPeriod: "2024-01-01 a 2025-05-31",
     reportDate: "2025-05-31",
     status: "COMPLETED",

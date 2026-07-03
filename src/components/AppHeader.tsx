@@ -32,8 +32,8 @@ type HeaderAccountContext = {
 export function AppHeader({
   title,
   subtitle,
-  storeName = "Recife Moto Parts",
-  storeContext = "Motopeças e acessórios",
+  storeName = "Nome da sua loja",
+  storeContext = "Segmento",
   rightSlot,
 }: AppHeaderProps) {
   const router = useRouter();
