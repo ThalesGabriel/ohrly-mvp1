@@ -1,16 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  BarChart3,
-  HelpCircle,
-  Home,
-  LineChart,
-  ListChecks,
-  Settings,
-  Signal,
-} from "lucide-react";
+import { Home, LogOut } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+
+import { supabase } from "@/lib/supabase/client";
 
 type SidebarItem = {
   label: string;
@@ -26,36 +21,13 @@ const sidebarItems: SidebarItem[] = [
     icon: Home,
     match: "exact",
   },
-  // {
-  //   label: "Crescimento",
-  //   href: "/growth",
-  //   icon: BarChart3,
-  //   match: "startsWith",
-  // },
-  // {
-  //   label: "Diagnóstico",
-  //   href: "/diagnostics",
-  //   icon: LineChart,
-  //   match: "startsWith",
-  // },
-  // {
-  //   label: "Sinais",
-  //   href: "/signals",
-  //   icon: Signal,
-  //   match: "startsWith",
-  // },
-  // {
-  //   label: "Janelas",
-  //   href: "/actionable-windows",
-  //   icon: ListChecks,
-  //   match: "startsWith",
-  // },
-
 ];
 
 export function AppSidebar() {
   const pathname = usePathname();
   const router = useRouter();
+
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   function isActive(item: SidebarItem) {
     if (item.match === "exact") {
@@ -63,6 +35,23 @@ export function AppSidebar() {
     }
 
     return pathname.startsWith(item.href);
+  }
+
+  async function handleLogout() {
+    if (isLoggingOut) return;
+
+    setIsLoggingOut(true);
+
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      setIsLoggingOut(false);
+      console.error("Erro ao sair:", error.message);
+      return;
+    }
+
+    router.replace("/login");
+    router.refresh();
   }
 
   return (
@@ -102,15 +91,18 @@ export function AppSidebar() {
         })}
       </nav>
 
-      {/* <div className="border-t border-slate-100 px-2 py-5">
+      <div className="border-t border-slate-100 px-2 py-5">
         <button
           type="button"
-          className="flex w-full flex-col items-center gap-1 rounded-2xl px-2 py-3 text-xs text-slate-500 hover:bg-slate-50"
+          onClick={handleLogout}
+          disabled={isLoggingOut}
+          title="Sair"
+          className="flex w-full flex-col items-center gap-1 rounded-2xl px-2 py-3 text-xs text-slate-500 transition hover:bg-red-50 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          <HelpCircle className="h-5 w-5" />
-          Ajuda
+          <LogOut className="h-5 w-5" />
+          <span>{isLoggingOut ? "Saindo" : "Sair"}</span>
         </button>
-      </div> */}
+      </div>
     </aside>
   );
 }

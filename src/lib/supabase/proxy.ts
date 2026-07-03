@@ -8,7 +8,10 @@ const supabaseKey =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 const PUBLIC_ROUTES = [
+  "/",
+  "/home",
   "/login",
+  "/onboarding",
   "/auth/callback",
 ];
 
@@ -29,6 +32,10 @@ function isStaticOrAssetRoute(pathname: string) {
     pathname.startsWith("/sitemap.xml") ||
     pathname.match(/\.(svg|png|jpg|jpeg|gif|webp|ico|css|js|map)$/)
   );
+}
+
+function isApiRoute(pathname: string) {
+  return pathname.startsWith("/api/");
 }
 
 function redirectWithCookies({
@@ -59,7 +66,12 @@ export async function updateSession(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname;
 
-  if (isStaticOrAssetRoute(pathname)) {
+  /**
+   * Importante:
+   * APIs não devem ser redirecionadas para /login pelo middleware.
+   * Cada API decide internamente se precisa ou não de autenticação.
+   */
+  if (isApiRoute(pathname) || isStaticOrAssetRoute(pathname)) {
     return NextResponse.next();
   }
 
