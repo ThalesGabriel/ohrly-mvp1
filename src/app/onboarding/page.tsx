@@ -1,65 +1,30 @@
 "use client";
 
 import { useMemo, useState, type FormEvent } from "react";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Check,
-  ChevronDown,
-  Mail,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, ChevronDown, Mail } from "lucide-react";
 
 function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
-type StepId = "profile" | "policies" | "refine" | "access";
-
-type OperationModel =
-  | "online_only"
-  | "hybrid_physical_online"
-  | "online_whatsapp"
-  | "online_marketplace"
-  | "physical_social"
-  | "starting_digital";
+type StepId = "profile" | "access";
 
 type MainQuestion =
-  | "conversion"
   | "checkout_completion"
-  | "products"
+  | "product_friction"
   | "repurchase"
-  | "digital_potential"
+  | "digital_role"
+  | "measurability"
   | "not_sure";
 
 type DataKey =
   | "spreadsheet"
-  | "orders"
-  | "products"
-  | "customers"
-  | "carts"
-  | "visits"
-  | "whatsapp"
-  | "physical_sales"
-  | "marketplace"
-  | "not_sure";
-
-type ScenarioId =
-  | "non_completed_orders"
-  | "product_friction"
-  | "post_purchase"
-  | "digital_role"
-  | "measurability"
-  | "channel_mix";
-
-type ChannelContext =
-  | "online_store"
+  | "ecommerce_platform"
+  | "erp"
   | "whatsapp"
   | "marketplace"
-  | "physical_store"
-  | "specific_product"
-  | "unknown";
-
-type BehaviorPattern = "punctual" | "recurring" | "gradual" | "localized" | "unknown";
+  | "manual_review"
+  | "not_tracking_well";
 
 type Option<T extends string> = {
   value: T;
@@ -74,15 +39,12 @@ type PolicyId =
   | "digital_channel_underuse"
   | "customer_measurability_gap"
   | "cart_recovery_signal"
-  | "channel_behavior_concentration"
-  | "assisted_sale_visibility";
+  | "channel_behavior_concentration";
 
 type Policy = {
   id: PolicyId;
   title: string;
   shortDescription: string;
-  simulationLine: string;
-  signals: string[];
   usefulFields: string[];
 };
 
@@ -93,151 +55,98 @@ type ScoredPolicy = Policy & {
 
 const steps: Array<{ id: StepId; eyebrow: string; title: string }> = [
   { id: "profile", eyebrow: "01", title: "Contexto" },
-  { id: "policies", eyebrow: "02", title: "Características" },
-  { id: "refine", eyebrow: "03", title: "Simulação" },
-  { id: "access", eyebrow: "04", title: "Checklist" },
-];
-
-const operationOptions: Array<Option<OperationModel>> = [
-  { value: "online_only", label: "Só loja online", description: "A venda acontece principalmente no site." },
-  { value: "hybrid_physical_online", label: "Loja física + online", description: "Existe operação presencial e canal digital ativo." },
-  { value: "online_whatsapp", label: "Online + WhatsApp/Instagram", description: "Checkout e atendimento assistido convivem." },
-  { value: "online_marketplace", label: "Online + marketplace", description: "A venda se distribui entre canal próprio e terceiros." },
-  { value: "physical_social", label: "Loja física + redes sociais", description: "O digital apoia venda local ou assistida." },
-  { value: "starting_digital", label: "Estou estruturando o digital", description: "Ainda existe pouca clareza sobre os dados." },
+  { id: "access", eyebrow: "02", title: "Checklist" },
 ];
 
 const questionOptions: Array<Option<MainQuestion>> = [
-  { value: "conversion", label: "Visitas não viram pedidos" },
-  { value: "checkout_completion", label: "Carrinhos ou pedidos não concluem" },
-  { value: "products", label: "Produtos puxam ou travam o resultado" },
-  { value: "repurchase", label: "Clientes compram uma vez e não voltam" },
-  { value: "digital_potential", label: "O digital parece pequeno demais" },
-  { value: "not_sure", label: "Ainda não sei exatamente" },
+  {
+    value: "checkout_completion",
+    label: "Pedidos ou carrinhos que não concluem",
+    description: "Quero entender onde a intenção deixa de virar venda confirmada.",
+  },
+  {
+    value: "product_friction",
+    label: "Produtos que geram interesse, mas pouca compra",
+    description: "Quero entender produtos que parecem travar antes da compra.",
+  },
+  {
+    value: "repurchase",
+    label: "Clientes que compram uma vez e não voltam",
+    description: "Quero entender recompra, continuidade e pós-compra.",
+  },
+  {
+    value: "digital_role",
+    label: "O papel do digital na operação",
+    description: "Quero entender se o digital vende, apoia ou funciona como vitrine.",
+  },
+  {
+    value: "measurability",
+    label: "Dificuldade de medir cliente, canal ou recompra",
+    description: "Quero entender se meus dados deixam parte da jornada invisível.",
+  },
+  {
+    value: "not_sure",
+    label: "Ainda não sei exatamente",
+    description: "Quero começar com uma visão mais simples do que observar.",
+  },
 ];
 
 const dataOptions: Array<Option<DataKey>> = [
-  { value: "spreadsheet", label: "Planilha própria" },
-  { value: "orders", label: "Pedidos" },
-  { value: "products", label: "Produtos" },
-  { value: "customers", label: "Clientes" },
-  { value: "carts", label: "Carrinhos" },
-  { value: "visits", label: "Visitas" },
-  { value: "whatsapp", label: "WhatsApp" },
-  { value: "physical_sales", label: "Vendas físicas" },
+  { value: "spreadsheet", label: "Planilha" },
+  { value: "ecommerce_platform", label: "Plataforma de e-commerce" },
+  { value: "erp", label: "ERP ou sistema de gestão" },
+  { value: "whatsapp", label: "WhatsApp/atendimento" },
   { value: "marketplace", label: "Marketplace" },
-  { value: "not_sure", label: "Não sei" },
-];
-
-const scenarioOptions: Array<Option<ScenarioId>> = [
-  { value: "non_completed_orders", label: "Intenção digital com baixa conclusão", description: "Pedidos ou carrinhos aparecem, mas parte não vira venda confirmada." },
-  { value: "product_friction", label: "Produto com atrito de compra", description: "Alguns produtos geram interesse, mas exigem mais confiança ou atendimento." },
-  { value: "post_purchase", label: "Baixa continuidade pós-compra", description: "A compra acontece, mas não vira recompra ou complementaridade." },
-  { value: "digital_role", label: "Digital pequeno ou pouco claro", description: "O canal online talvez funcione como vitrine, apoio ou extensão local." },
-  { value: "measurability", label: "Dificuldade de medir cliente e recompra", description: "A operação vende, mas parte da jornada fica invisível nos dados." },
-  { value: "channel_mix", label: "Canais misturados", description: "Site, WhatsApp, marketplace e físico podem estar contando histórias diferentes." },
-];
-
-const channelOptions: Array<Option<ChannelContext>> = [
-  { value: "online_store", label: "Loja online" },
-  { value: "whatsapp", label: "WhatsApp/Instagram" },
-  { value: "marketplace", label: "Marketplace" },
-  { value: "physical_store", label: "Loja física" },
-  { value: "specific_product", label: "Produto específico" },
-  { value: "unknown", label: "Não sei" },
-];
-
-const patternOptions: Array<Option<BehaviorPattern>> = [
-  { value: "punctual", label: "Parece pontual" },
-  { value: "recurring", label: "Aparece com frequência" },
-  { value: "gradual", label: "Vem piorando aos poucos" },
-  { value: "localized", label: "Acontece em alguns canais/produtos" },
-  { value: "unknown", label: "Não sei" },
+  { value: "manual_review", label: "Vejo manualmente no fim do dia" },
+  { value: "not_tracking_well", label: "Ainda não acompanho bem" },
 ];
 
 const policies: Policy[] = [
   {
     id: "order_completion_quality",
     title: "Pedidos criados que não viram venda confirmada",
-    shortDescription: "Entende se existe perda recorrente entre intenção de compra, checkout e confirmação.",
-    simulationLine: "O Ohrly olharia para a distância entre pedido criado, pagamento e confirmação.",
-    signals: ["pedido criado", "status do pedido", "pagamento aprovado", "pedido cancelado"],
-    usefulFields: ["order_id", "created_at", "paid_at", "order_status", "payment_status", "order_value"],
+    shortDescription: "Ajuda a revisar se existe perda entre intenção de compra, checkout e confirmação do pedido.",
+    usefulFields: ["pedido", "status", "pagamento", "valor", "data"],
   },
   {
     id: "high_friction_product_intent",
     title: "Produtos com interesse, mas baixa conclusão",
-    shortDescription: "Ajuda a separar produto com demanda de produto que exige confiança, atendimento ou prova.",
-    simulationLine: "O Ohrly olharia para produtos que aparecem na intenção, mas não aparecem na venda final.",
-    signals: ["produto visitado", "produto no carrinho", "pedido não concluído", "categoria"],
-    usefulFields: ["product_id", "product_name", "category", "cart_id", "order_id", "quantity", "price"],
+    shortDescription: "Ajuda a perceber produtos que geram intenção, mas exigem mais confiança, prova ou atendimento.",
+    usefulFields: ["produto", "categoria", "carrinho", "pedido", "preço"],
   },
   {
     id: "post_purchase_continuity",
     title: "Clientes que compram uma vez e não voltam",
-    shortDescription: "Mostra se a primeira compra está virando relacionamento, recompra ou complementaridade.",
-    simulationLine: "O Ohrly olharia para continuidade pós-compra e compras complementares.",
-    signals: ["primeira compra", "segunda compra", "intervalo de retorno", "produto complementar"],
-    usefulFields: ["customer_id", "order_id", "paid_at", "product_id", "category", "order_value"],
+    shortDescription: "Ajuda a revisar se a primeira compra vira relacionamento, recompra ou venda complementar.",
+    usefulFields: ["cliente", "pedido", "produto", "data", "valor"],
   },
   {
     id: "digital_channel_underuse",
-    title: "Canal digital pequeno em relação à operação",
-    shortDescription: "Ajuda a entender se o digital vende, gera intenção, apoia WhatsApp ou estende a loja física.",
-    simulationLine: "O Ohrly olharia para o papel do online dentro da operação total.",
-    signals: ["receita por canal", "pedidos por canal", "venda assistida", "retirada local"],
-    usefulFields: ["channel", "order_id", "paid_at", "order_value", "store_origin", "fulfillment_type"],
+    title: "Canal digital pequeno ou pouco claro",
+    shortDescription: "Ajuda a separar se o digital vende, gera intenção, apoia o WhatsApp ou funciona como vitrine.",
+    usefulFields: ["canal", "pedido", "origem", "valor", "data"],
   },
   {
     id: "customer_measurability_gap",
     title: "Dados insuficientes para medir continuidade",
-    shortDescription: "Identifica quando há venda, mas pouco rastro para medir recompra, LTV ou jornada real.",
-    simulationLine: "O Ohrly olharia para vendas com cliente genérico, anônimo ou difícil de acompanhar.",
-    signals: ["cliente genérico", "venda anônima", "concentração em poucos cadastros", "origem ausente"],
-    usefulFields: ["customer_id", "customer_phone", "channel", "order_id", "seller_id", "created_at"],
+    shortDescription: "Ajuda a identificar quando a loja vende, mas parte do cliente, canal ou recompra fica invisível.",
+    usefulFields: ["cliente", "telefone", "canal", "pedido", "data"],
   },
   {
     id: "cart_recovery_signal",
-    title: "Carrinhos ou intenções que merecem recuperação",
-    shortDescription: "Diferencia abandono recuperável de ruído, tentativa ruim ou intenção sem qualidade.",
-    simulationLine: "O Ohrly olharia se os abandonos parecem oportunidade real ou apenas ruído.",
-    signals: ["carrinho criado", "checkout iniciado", "abandono", "nova tentativa"],
-    usefulFields: ["cart_id", "created_at", "checkout_started_at", "customer_id", "product_id", "cart_value"],
+    title: "Carrinhos ou intenções que merecem atenção",
+    shortDescription: "Ajuda a diferenciar abandono recuperável de ruído, tentativa ruim ou intenção sem qualidade.",
+    usefulFields: ["carrinho", "cliente", "produto", "valor", "data"],
   },
   {
     id: "channel_behavior_concentration",
-    title: "Dependência excessiva de um canal",
-    shortDescription: "Mostra se o resultado está concentrado demais em loja física, marketplace, WhatsApp ou site.",
-    simulationLine: "O Ohrly olharia para concentração de resultado e risco de leitura incompleta.",
-    signals: ["receita por canal", "pedidos por canal", "clientes por canal", "mix por canal"],
-    usefulFields: ["channel", "order_id", "customer_id", "order_value", "product_id", "paid_at"],
-  },
-  {
-    id: "assisted_sale_visibility",
-    title: "Venda assistida que não aparece no e-commerce",
-    shortDescription: "Ajuda a perceber quando WhatsApp, Instagram ou balcão seguram uma intenção que nasceu no digital.",
-    simulationLine: "O Ohrly olharia para a ponte entre intenção digital e venda assistida.",
-    signals: ["origem da conversa", "produto citado", "atendimento", "pedido posterior"],
-    usefulFields: ["conversation_id", "started_at", "channel", "customer_id", "product_reference", "order_id"],
+    title: "Dependência ou mistura entre canais",
+    shortDescription: "Ajuda a entender se site, WhatsApp, marketplace e físico contam partes diferentes da mesma jornada.",
+    usefulFields: ["canal", "pedido", "cliente", "produto", "valor"],
   },
 ];
 
-const policyScenarioMap: Record<PolicyId, ScenarioId> = {
-  order_completion_quality: "non_completed_orders",
-  high_friction_product_intent: "product_friction",
-  post_purchase_continuity: "post_purchase",
-  digital_channel_underuse: "digital_role",
-  customer_measurability_gap: "measurability",
-  cart_recovery_signal: "non_completed_orders",
-  channel_behavior_concentration: "channel_mix",
-  assisted_sale_visibility: "channel_mix",
-};
-
-function scorePolicies(
-  operationModel: OperationModel | "",
-  mainQuestion: MainQuestion | "",
-  availableData: DataKey[],
-): ScoredPolicy[] {
+function scorePolicies(mainQuestion: MainQuestion | "", availableData: DataKey[]): ScoredPolicy[] {
   return policies
     .map((policy) => {
       let score = 0;
@@ -245,73 +154,55 @@ function scorePolicies(
       const has = (key: DataKey) => availableData.includes(key);
 
       if (policy.id === "order_completion_quality") {
-        if (mainQuestion === "checkout_completion") score += 38;
-        if (mainQuestion === "conversion") score += 22;
-        if (has("orders")) score += 18;
-        if (has("carts")) score += 12;
-        if (["online_only", "online_whatsapp", "online_marketplace"].includes(operationModel)) score += 10;
-        if (score > 0) fitReasons.push("você indicou interesse em entender conclusão de intenção ou pedidos");
+        if (mainQuestion === "checkout_completion") score += 42;
+        if (has("ecommerce_platform") || has("spreadsheet")) score += 12;
+        if (has("manual_review")) score += 8;
+        if (score > 0) fitReasons.push("você indicou interesse em entender pedidos ou carrinhos não concluídos");
       }
 
       if (policy.id === "high_friction_product_intent") {
-        if (mainQuestion === "products") score += 38;
-        if (mainQuestion === "conversion") score += 14;
-        if (has("products")) score += 18;
-        if (has("visits") || has("carts")) score += 12;
-        if (["online_whatsapp", "physical_social"].includes(operationModel)) score += 8;
+        if (mainQuestion === "product_friction") score += 42;
+        if (mainQuestion === "checkout_completion") score += 12;
+        if (has("ecommerce_platform") || has("spreadsheet")) score += 10;
         if (score > 0) fitReasons.push("produtos podem precisar ser lidos por interesse, atrito e conclusão");
       }
 
       if (policy.id === "post_purchase_continuity") {
-        if (mainQuestion === "repurchase") score += 40;
-        if (has("customers")) score += 20;
-        if (has("orders")) score += 12;
-        if (has("products")) score += 8;
-        if (["hybrid_physical_online", "physical_social"].includes(operationModel)) score += 8;
-        if (score > 0) fitReasons.push("há sinais de que recompra ou complementaridade podem importar");
+        if (mainQuestion === "repurchase") score += 42;
+        if (has("erp") || has("spreadsheet")) score += 12;
+        if (has("whatsapp")) score += 8;
+        if (score > 0) fitReasons.push("há sinais de que recompra ou continuidade podem importar");
       }
 
       if (policy.id === "digital_channel_underuse") {
-        if (mainQuestion === "digital_potential") score += 40;
-        if (["hybrid_physical_online", "physical_social", "starting_digital"].includes(operationModel)) score += 24;
-        if (has("physical_sales")) score += 14;
-        if (has("orders")) score += 8;
-        if (score > 0) fitReasons.push("sua operação pode precisar separar venda direta, vitrine e venda assistida");
+        if (mainQuestion === "digital_role") score += 42;
+        if (has("whatsapp") || has("marketplace")) score += 12;
+        if (has("manual_review")) score += 8;
+        if (score > 0) fitReasons.push("o digital pode estar vendendo, apoiando ou funcionando como vitrine");
       }
 
       if (policy.id === "customer_measurability_gap") {
-        if (mainQuestion === "repurchase") score += 18;
-        if (["hybrid_physical_online", "physical_social", "starting_digital"].includes(operationModel)) score += 20;
-        if (has("physical_sales")) score += 16;
-        if (has("customers")) score += 8;
-        if (has("not_sure")) score += 16;
-        if (score > 0) fitReasons.push("a continuidade pode depender de identificar melhor o cliente entre canais");
+        if (mainQuestion === "measurability") score += 42;
+        if (mainQuestion === "repurchase") score += 12;
+        if (has("not_tracking_well")) score += 16;
+        if (has("manual_review")) score += 8;
+        if (score > 0) fitReasons.push("a continuidade depende de identificar melhor cliente, canal e origem");
       }
 
       if (policy.id === "cart_recovery_signal") {
-        if (mainQuestion === "checkout_completion") score += 25;
-        if (mainQuestion === "conversion") score += 22;
-        if (has("carts")) score += 25;
-        if (has("visits")) score += 10;
+        if (mainQuestion === "checkout_completion") score += 26;
+        if (has("ecommerce_platform")) score += 12;
         if (score > 0) fitReasons.push("carrinhos e intenções podem merecer leitura antes de recuperação automática");
       }
 
       if (policy.id === "channel_behavior_concentration") {
-        if (["hybrid_physical_online", "online_marketplace", "online_whatsapp", "physical_social"].includes(operationModel)) score += 24;
-        if (has("marketplace") || has("whatsapp") || has("physical_sales")) score += 20;
-        if (mainQuestion === "digital_potential") score += 12;
+        if (mainQuestion === "digital_role") score += 24;
+        if (has("whatsapp") || has("marketplace") || has("erp")) score += 18;
         if (score > 0) fitReasons.push("os canais podem estar contando partes diferentes da mesma jornada");
       }
 
-      if (policy.id === "assisted_sale_visibility") {
-        if (["online_whatsapp", "physical_social"].includes(operationModel)) score += 28;
-        if (has("whatsapp")) score += 24;
-        if (mainQuestion === "products" || mainQuestion === "conversion") score += 10;
-        if (score > 0) fitReasons.push("a venda pode estar acontecendo fora do checkout tradicional");
-      }
-
-      if (mainQuestion === "not_sure") score += 6;
-      if (has("not_sure")) score += 4;
+      if (mainQuestion === "not_sure") score += 10;
+      if (has("not_tracking_well")) score += 6;
 
       return { ...policy, score, fitReasons };
     })
@@ -322,12 +213,8 @@ function scorePolicies(
 
 export default function OhrlyEcommerceOnboardingStepper() {
   const [currentStep, setCurrentStep] = useState<StepId>("profile");
-  const [operationModel, setOperationModel] = useState<OperationModel | "">("");
   const [mainQuestion, setMainQuestion] = useState<MainQuestion | "">("");
   const [availableData, setAvailableData] = useState<DataKey[]>([]);
-  const [scenario, setScenario] = useState<ScenarioId | "">("");
-  const [channelContext, setChannelContext] = useState<ChannelContext | "">("");
-  const [behaviorPattern, setBehaviorPattern] = useState<BehaviorPattern | "">("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [wantsEarlyAccess, setWantsEarlyAccess] = useState(false);
@@ -336,48 +223,34 @@ export default function OhrlyEcommerceOnboardingStepper() {
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const currentStepIndex = steps.findIndex((step) => step.id === currentStep);
-  const topPolicies = useMemo(
-    () => scorePolicies(operationModel, mainQuestion, availableData),
-    [operationModel, mainQuestion, availableData],
-  );
-
-  const selectedScenario: ScenarioId = scenario || (topPolicies[0] ? policyScenarioMap[topPolicies[0].id] : "non_completed_orders");
-  const simulationPolicies = topPolicies.length > 0 ? topPolicies : policies.slice(0, 5).map((policy) => ({ ...policy, score: 0, fitReasons: [] }));
+  const topPolicies = useMemo(() => scorePolicies(mainQuestion, availableData), [mainQuestion, availableData]);
+  const previewPolicies = topPolicies.length > 0 ? topPolicies : policies.slice(0, 5).map((policy) => ({ ...policy, score: 0, fitReasons: [] }));
 
   const canContinue =
     currentStep === "profile"
-      ? Boolean(operationModel && mainQuestion && availableData.length)
-      : currentStep === "policies"
-        ? topPolicies.length > 0
-        : currentStep === "refine"
-          ? Boolean((scenario || selectedScenario) && channelContext && behaviorPattern)
-          : email.trim().length >= 5 && email.includes("@");
+      ? Boolean(mainQuestion && availableData.length)
+      : email.trim().length >= 5 && email.includes("@");
 
   function toggleData(key: DataKey) {
     setAvailableData((current) => {
-      if (key === "not_sure") return current.includes("not_sure") ? [] : ["not_sure"];
-      const withoutNotSure = current.filter((item) => item !== "not_sure");
-      return withoutNotSure.includes(key)
-        ? withoutNotSure.filter((item) => item !== key)
-        : [...withoutNotSure, key];
+      if (key === "not_tracking_well") {
+        return current.includes("not_tracking_well") ? [] : ["not_tracking_well"];
+      }
+
+      const withoutNotTracking = current.filter((item) => item !== "not_tracking_well");
+      return withoutNotTracking.includes(key)
+        ? withoutNotTracking.filter((item) => item !== key)
+        : [...withoutNotTracking, key];
     });
   }
 
   function goNext() {
     if (!canContinue) return;
-
-    if (currentStep === "profile") setCurrentStep("policies");
-    if (currentStep === "policies") {
-      if (!scenario && topPolicies[0]) setScenario(policyScenarioMap[topPolicies[0].id]);
-      setCurrentStep("refine");
-    }
-    if (currentStep === "refine") setCurrentStep("access");
+    setCurrentStep("access");
   }
 
   function goBack() {
-    if (currentStep === "policies") setCurrentStep("profile");
-    if (currentStep === "refine") setCurrentStep("policies");
-    if (currentStep === "access") setCurrentStep("refine");
+    setCurrentStep("profile");
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -388,20 +261,20 @@ export default function OhrlyEcommerceOnboardingStepper() {
     setSubmitError(null);
 
     const payload = {
-      source: "ohrly_ecommerce_checklist_lead_stepper",
-      operationModel,
+      source: "ohrly_ecommerce_checklist_lead_short_flow",
+      operationModel: null,
       mainQuestion,
       availableData,
-      matchedPolicies: topPolicies.map(({ id, title, score, fitReasons }) => ({
+      matchedPolicies: previewPolicies.map(({ id, title, score, fitReasons }) => ({
         id,
         title,
         score,
         fitReasons,
       })),
       refinement: {
-        scenario: scenario || selectedScenario,
-        channelContext,
-        behaviorPattern,
+        scenario: null,
+        channelContext: null,
+        behaviorPattern: null,
       },
       checklistRequest: {
         name,
@@ -409,64 +282,36 @@ export default function OhrlyEcommerceOnboardingStepper() {
         leadMagnet: "checklist_desempenho_invisivel_ecommerce",
         intent: "receive_free_checklist",
         wantsEarlyAccess,
-        suggestedFocus: simulationPolicies
-          .slice(0, 5)
-          .map(({ id, title }) => ({ id, title })),
+        suggestedFocus: previewPolicies.slice(0, 5).map(({ id, title }) => ({ id, title })),
       },
       tracking: {
-        landingPath:
-          typeof window !== "undefined" ? window.location.pathname : null,
-        referrer:
-          typeof document !== "undefined" ? document.referrer || null : null,
-        utmSource:
-          typeof window !== "undefined"
-            ? new URLSearchParams(window.location.search).get("utm_source")
-            : null,
-        utmMedium:
-          typeof window !== "undefined"
-            ? new URLSearchParams(window.location.search).get("utm_medium")
-            : null,
-        utmCampaign:
-          typeof window !== "undefined"
-            ? new URLSearchParams(window.location.search).get("utm_campaign")
-            : null,
-        utmContent:
-          typeof window !== "undefined"
-            ? new URLSearchParams(window.location.search).get("utm_content")
-            : null,
-        utmTerm:
-          typeof window !== "undefined"
-            ? new URLSearchParams(window.location.search).get("utm_term")
-            : null,
+        landingPath: typeof window !== "undefined" ? window.location.pathname : null,
+        referrer: typeof document !== "undefined" ? document.referrer || null : null,
+        utmSource: typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("utm_source") : null,
+        utmMedium: typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("utm_medium") : null,
+        utmCampaign: typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("utm_campaign") : null,
+        utmContent: typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("utm_content") : null,
+        utmTerm: typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("utm_term") : null,
       },
     };
 
     try {
       const response = await fetch("/api/ecommerce-onboarding/checklist", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(
-          result?.message || "Não foi possível solicitar o checklist agora."
-        );
+        throw new Error(result?.message || "Não foi possível solicitar o checklist agora.");
       }
 
       setSubmitted(true);
     } catch (error) {
       console.error("Ohrly ecommerce checklist request failed", error);
-
-      setSubmitError(
-        error instanceof Error
-          ? error.message
-          : "Não foi possível solicitar o checklist agora."
-      );
+      setSubmitError(error instanceof Error ? error.message : "Não foi possível solicitar o checklist agora.");
     } finally {
       setSubmitting(false);
     }
@@ -474,18 +319,19 @@ export default function OhrlyEcommerceOnboardingStepper() {
 
   return (
     <div className="min-h-screen bg-[#fbf9ff] text-slate-950">
+      <main className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
+        <section>
+          <p className="inline-flex rounded-full border border-violet-100 bg-white px-3 py-1 text-xs font-semibold text-violet-700 shadow-sm shadow-violet-100/60">
+            Checklist gratuito para e-commerce
+          </p>
 
-      <main className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
-        <section className="">
-          <div>
-            <h1 className="mt-5 max-w-3xl text-3xl font-semibold leading-tight tracking-[-0.04em] text-slate-950">
-              Como anda o desempenho do seu e-commerce
-            </h1>
+          <h1 className="mt-5 max-w-3xl text-3xl font-semibold leading-tight tracking-[-0.04em] text-slate-950 sm:text-4xl">
+            Receba um checklist para revisar o desempenho do seu e-commerce.
+          </h1>
 
-            <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
-              Responda algumas perguntas rápidas para entender quais sinais de desempenho fazem mais sentido para o seu e-commerce.
-            </p>
-          </div>
+          <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
+            Responda 2 perguntas rápidas e receba um material para observar pedidos não concluídos, produtos com atrito, recompra e dados invisíveis antes de decidir o que fazer amanhã.
+          </p>
         </section>
 
         <section className="relative rounded-[2rem] border border-violet-100 bg-white shadow-sm shadow-violet-100/70">
@@ -496,187 +342,150 @@ export default function OhrlyEcommerceOnboardingStepper() {
           <form onSubmit={handleSubmit}>
             <div className="relative p-4 sm:p-6 lg:p-8">
               {currentStep === "profile" && (
-                <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-                  <StepIntro
-                    eyebrow="Primeiro contexto"
-                    title="Vamos entender que tipo de e-commerce está chegando."
-                    description="Algumas informações iniciais para classificarmos sua operação e como podemos gerar valor para você e seu negócio."
-                  />
-
-                  <div className="relative z-20 space-y-6">
-                    <SelectField
-                      label="Como sua loja vende hoje?"
-                      placeholder="Selecione o modelo da loja"
-                      value={operationModel}
-                      options={operationOptions}
-                      onChange={(value) => setOperationModel(value as OperationModel)}
-                    />
-
-                    <SelectField
-                      label="O que parece mais importante entender agora?"
-                      placeholder="Selecione a principal dúvida"
-                      value={mainQuestion}
-                      options={questionOptions}
-                      onChange={(value) => setMainQuestion(value as MainQuestion)}
-                    />
-
-                    <MultiSelectDropdown
-                      label="O que você usa para acompanhar o desempenho da sua loja?"
-                      placeholder="Selecione os dados disponíveis"
-                      values={availableData}
-                      options={dataOptions}
-                      onToggle={toggleData}
-                    />
-                  </div>
-                </div>
-              )}
-
-              {currentStep === "policies" && (
-                <div >
-                  <StepIntro
-                    eyebrow="Características"
-                    full
-                    title="Estas características fazem parte do desempenho do seu e-commerce."
-                    description="Observamos elas para estimar o desempenho do seu negócio para potencializar seus resultados."
-                  />
-
-                  <div className="space-y-3 mt-5 grid sm:grid-cols-3 gap-5">
-                    {topPolicies.map((policy, index) => (
-                      <PolicyCard key={policy.id} policy={policy} index={index} />
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {currentStep === "refine" && (
-                <div className="">
-                  <div className="space-y-7">
+                <div>
+                  <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
                     <StepIntro
-                      eyebrow="Refinar contexto"
-                      title="O que é mais importante para você entender sobre seu negócio?"
-                      full
-                      description="Queremos entender um pouco mais o seu objetivo e o que te traz até aqui."
+                      eyebrow="Contexto rápido"
+                      title="Duas respostas para adaptar o checklist."
+                      description="A ideia é reduzir fricção: você informa o que quer entender e como acompanha os resultados hoje. O checklist vem depois no seu e-mail."
                     />
 
-                    <div className="relative z-20 space-y-5">
+                    <div className="relative z-20 space-y-6">
                       <SelectField
-                        label="Alguma dessas situações acontece com você?"
-                        placeholder="Selecione o cenário"
-                        value={scenario || selectedScenario}
-                        options={scenarioOptions}
-                        onChange={(value) => setScenario(value as ScenarioId)}
+                        label="O que você mais quer entender agora?"
+                        placeholder="Selecione a principal dúvida"
+                        value={mainQuestion}
+                        options={questionOptions}
+                        onChange={(value) => setMainQuestion(value as MainQuestion)}
                       />
 
-                      <SelectField
-                        label="Onde isso parece acontecer mais?"
-                        placeholder="Selecione o ponto da jornada"
-                        value={channelContext}
-                        options={channelOptions}
-                        onChange={(value) => setChannelContext(value as ChannelContext)}
+                      <MultiSelectDropdown
+                        label="Como você acompanha os resultados hoje?"
+                        placeholder="Selecione uma ou mais opções"
+                        values={availableData}
+                        options={dataOptions}
+                        onToggle={toggleData}
                       />
 
-                      <SelectField
-                        label="Esse comportamento parece ser mais…"
-                        placeholder="Selecione o padrão percebido"
-                        value={behaviorPattern}
-                        options={patternOptions}
-                        onChange={(value) => setBehaviorPattern(value as BehaviorPattern)}
-                      />
                     </div>
                   </div>
-
+                  <div className="rounded-3xl border border-violet-100 bg-[#fbf9ff] p-5 mt-5">
+                    <p className="text-sm font-semibold text-slate-950">O que você vai receber</p>
+                    <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                      {[
+                        "O que vendeu",
+                        "O que travou",
+                        "O que merece ação",
+                        "Quais dados observar",
+                      ].map((item) => (
+                        <div key={item} className="flex items-center gap-2 rounded-2xl bg-white px-3 py-2 text-sm text-slate-600">
+                          <Check className="h-4 w-4 text-violet-700" />
+                          {item}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               )}
 
               {currentStep === "access" && (
-                <div className="">
+                <div>
                   <StepIntro
-                    eyebrow="Checklist gratuito"
+                    eyebrow="Receber checklist"
                     full
-                    title="Receba um checklist baseado no seu contexto."
-                    description="Em vez de pedir planilha ou marcar uma conversa agora, vamos te enviar um material de entrada para avaliar onde seu e-commerce pode estar perdendo desempenho sem parecer quebrado."
+                    title="Seu checklist gratuito está quase pronto."
+                    description="Com base nas suas respostas, vamos priorizar os sinais mais úteis para revisar o desempenho do seu e-commerce sem pedir planilha, upload ou call agora."
                   />
 
-                  <div className="space-y-5 mt-5">
-                    {submitted ? (
-                      <div className="rounded-3xl border border-violet-100 bg-violet-50 p-6">
-                        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-700 text-white">
-                          <Check className="h-5 w-5" />
+                  <div className="mt-6 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+                    <div className="rounded-3xl border border-violet-100 bg-[#fbf9ff] p-5">
+                      <div className="flex items-start gap-3">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-violet-700 text-white">
+                          <Mail className="h-5 w-5" />
                         </div>
-                        <h2 className="mt-5 text-2xl font-semibold tracking-tight text-slate-950">Checklist solicitado.</h2>
-                        <p className="mt-3 text-sm leading-6 text-slate-600">
-                          Vamos enviar o checklist gratuito no e-mail informado. Ele não é um diagnóstico da sua loja, mas ajuda a organizar os sinais que uma operação parecida deveria observar.
-                        </p>
-                        {wantsEarlyAccess && (
-                          <p className="mt-3 rounded-2xl border border-violet-100 bg-white p-3 text-sm leading-6 text-slate-600">
-                            Também registramos seu interesse na versão inicial do Ohrly. Se houver aderência ao seu perfil de operação, enviamos um convite de acesso.
+                        <div>
+                          <p className="text-sm font-semibold text-slate-950">Checklist de desempenho invisível</p>
+                          <p className="mt-1 text-sm leading-6 text-slate-600">
+                            Um material curto para olhar o dia da operação e encontrar sinais de venda, atrito, recompra e dados que merecem atenção.
                           </p>
-                        )}
+                        </div>
                       </div>
-                    ) : (
-                      <div className="rounded-3xl border border-violet-100 bg-[#fbf9ff] p-5">
-                        <div className="flex items-start gap-3">
-                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-violet-700 text-white">
-                            <Mail className="h-5 w-5" />
+
+                      <div className="mt-5 rounded-2xl border border-violet-100 bg-white p-4">
+                        <p className="text-sm font-semibold text-slate-950">Seu checklist deve priorizar:</p>
+                        <div className="mt-3 space-y-2">
+                          {previewPolicies.slice(0, 4).map((policy) => (
+                            <div key={policy.id} className="flex gap-3 text-sm leading-5 text-slate-600">
+                              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-violet-600" />
+                              <span>{policy.title}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      {submitted ? (
+                        <div className="rounded-3xl border border-violet-100 bg-white p-5">
+                          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-700 text-white">
+                            <Check className="h-5 w-5" />
                           </div>
-                          <div>
-                            <p className="text-sm font-semibold text-slate-950">Checklist de desempenho invisível para e-commerce</p>
-                            <p className="mt-1 text-sm leading-6 text-slate-600">
-                              Um material curto para revisar conclusão de pedidos, produtos com atrito, papel do digital, continuidade de clientes e qualidade dos dados disponíveis.
+                          <h2 className="mt-5 text-2xl font-semibold tracking-tight text-slate-950">Checklist solicitado.</h2>
+                          <p className="mt-3 text-sm leading-6 text-slate-600">
+                            Vamos enviar o checklist gratuito no e-mail informado. Ele não é um diagnóstico da sua loja, mas ajuda a organizar os sinais que uma operação parecida deveria observar.
+                          </p>
+                          {wantsEarlyAccess && (
+                            <p className="mt-3 rounded-2xl border border-violet-100 bg-[#fbf9ff] p-3 text-sm leading-6 text-slate-600">
+                              Também registramos seu interesse na versão inicial do Ohrly. Se houver aderência ao seu perfil de operação, enviamos um convite de acesso.
                             </p>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="flex flex-col justify-evenly h-[100%]">
+                          <div className="rounded-3xl border border-violet-100 bg-white p-5">
+                            <div className="grid gap-3 sm:grid-cols-2">
+                              <label className="block">
+                                <span className="text-xs font-semibold text-slate-500">
+                                  Nome <span className="font-normal">opcional</span>
+                                </span>
+                                <input
+                                  value={name}
+                                  onChange={(event) => setName(event.target.value)}
+                                  placeholder="Seu nome"
+                                  className="mt-1 h-11 w-full rounded-2xl border border-violet-100 bg-white px-4 text-sm outline-none transition placeholder:text-slate-400 focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
+                                />
+                              </label>
+
+                              <label className="block">
+                                <span className="text-xs font-semibold text-slate-500">E-mail</span>
+                                <input
+                                  value={email}
+                                  onChange={(event) => setEmail(event.target.value)}
+                                  placeholder="voce@empresa.com"
+                                  type="email"
+                                  className="mt-1 h-11 w-full rounded-2xl border border-violet-100 bg-white px-4 text-sm outline-none transition placeholder:text-slate-400 focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
+                                />
+                              </label>
+                            </div>
+                            {submitError && (
+                              <p className="mt-4 rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">{submitError}</p>
+                            )}
                           </div>
-                        </div>
-
-                        <div className="mt-5 rounded-2xl border border-violet-100 bg-white p-4">
-                          <p className="text-sm font-semibold text-slate-950">Seu checklist deve priorizar:</p>
-                          <div className="mt-3 space-y-2">
-                            {simulationPolicies.slice(0, 4).map((policy) => (
-                              <div key={policy.id} className="flex gap-3 text-sm leading-5 text-slate-600">
-                                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-violet-600" />
-                                <span>{policy.title}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                          <label className="block">
-                            <span className="text-xs font-semibold text-slate-500">Nome <span className="font-normal">opcional</span></span>
+                          <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-2xl border border-violet-100 bg-[#fbf9ff] p-4 transition hover:border-violet-200">
                             <input
-                              value={name}
-                              onChange={(event) => setName(event.target.value)}
-                              placeholder="Seu nome"
-                              className="mt-1 h-11 w-full rounded-2xl border border-violet-100 bg-white px-4 text-sm outline-none transition placeholder:text-slate-400 focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
+                              type="checkbox"
+                              checked={wantsEarlyAccess}
+                              onChange={(event) => setWantsEarlyAccess(event.target.checked)}
+                              className="mt-1 h-4 w-4 rounded border-violet-200 text-violet-700 focus:ring-violet-500"
                             />
-                          </label>
-
-                          <label className="block">
-                            <span className="text-xs font-semibold text-slate-500">E-mail</span>
-                            <input
-                              value={email}
-                              onChange={(event) => setEmail(event.target.value)}
-                              placeholder="voce@empresa.com"
-                              type="email"
-                              className="mt-1 h-11 w-full rounded-2xl border border-violet-100 bg-white px-4 text-sm outline-none transition placeholder:text-slate-400 focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
-                            />
+                            <span className="text-sm leading-6 text-slate-600">
+                              <span className="font-semibold text-slate-950">Também quero participar da versão inicial do Ohrly.</span>{" "}
+                              Estamos liberando acesso exclusivo para poucas operações e podemos enviar um convite se houver aderência.
+                            </span>
                           </label>
                         </div>
-
-                        <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-2xl border border-violet-100 bg-white p-4 transition hover:border-violet-200">
-                          <input
-                            type="checkbox"
-                            checked={wantsEarlyAccess}
-                            onChange={(event) => setWantsEarlyAccess(event.target.checked)}
-                            className="mt-1 h-4 w-4 rounded border-violet-200 text-violet-700 focus:ring-violet-500"
-                          />
-                          <span className="text-sm leading-6 text-slate-600">
-                            <span className="font-semibold text-slate-950">Também quero participar da versão inicial do Ohrly.</span>{" "}
-                            Estamos liberando acesso exclusivo para poucas operações e podemos enviar um convite se houver aderência.
-                          </span>
-                        </label>
-
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
               )}
@@ -710,9 +519,7 @@ export default function OhrlyEcommerceOnboardingStepper() {
                     disabled={!canContinue}
                     className="inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-violet-700 px-5 text-sm font-semibold text-white transition hover:bg-violet-800 disabled:cursor-not-allowed disabled:opacity-45"
                   >
-                    {currentStep === "profile" && "Ver características relevantes"}
-                    {currentStep === "policies" && "Aproximar leitura"}
-                    {currentStep === "refine" && "Receber checklist"}
+                    Continuar
                     <ArrowRight className="h-4 w-4" />
                   </button>
                 )}
@@ -735,7 +542,7 @@ function Stepper({ currentStep }: { currentStep: StepId }) {
         <div className="h-full rounded-full bg-violet-700 transition-all duration-300" style={{ width: `${progress}%` }} />
       </div>
 
-      <div className="mt-4 grid grid-cols-4 gap-2">
+      <div className="mt-4 grid grid-cols-2 gap-2">
         {steps.map((step, index) => {
           const active = step.id === currentStep;
           const completed = index < currentIndex;
@@ -761,7 +568,7 @@ function Stepper({ currentStep }: { currentStep: StepId }) {
   );
 }
 
-function StepIntro({ eyebrow, title, description, full }: { eyebrow: string; title: string; description: string, full?: boolean }) {
+function StepIntro({ eyebrow, title, description, full }: { eyebrow: string; title: string; description: string; full?: boolean }) {
   return (
     <div className={full ? "" : "max-w-md"}>
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-violet-600">{eyebrow}</p>
@@ -916,19 +723,5 @@ function MultiSelectDropdown<T extends string>({
         </div>
       )}
     </div>
-  );
-}
-
-function PolicyCard({ policy, index }: { policy: ScoredPolicy; index: number }) {
-  return (
-    <article className="rounded-3xl border border-violet-100 bg-white p-5 transition hover:border-violet-200 hover:bg-[#fbf9ff]">
-      <div className="flex items-start gap-4">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-2xl bg-violet-50 text-sm font-bold text-violet-700">{index + 1}</div>
-        <div>
-          <h3 className="text-base font-semibold leading-snug text-slate-950">{policy.title}</h3>
-          <p className="mt-2 text-sm leading-6 text-slate-600">{policy.shortDescription}</p>
-        </div>
-      </div>
-    </article>
   );
 }
