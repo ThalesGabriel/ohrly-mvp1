@@ -104,7 +104,7 @@ export async function POST(request: Request) {
 
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-    "http://localhost:3000";
+    "https://ohrly-mvp1.vercel.app/";
 
   const checklistUrl = `${siteUrl}/materials/checklist_desempenho_invisivel_ecommerce_ohrly.pdf`;
 
