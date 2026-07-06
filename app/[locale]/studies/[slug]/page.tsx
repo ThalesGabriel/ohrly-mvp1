@@ -1,26 +1,35 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { setRequestLocale } from "next-intl/server";
 import { DefaultStudyDetail } from "@/components/studies/DefaultStudyDetail";
 import { customStudyComponents } from "@/components/studies/custom";
 import { getStudyBySlug, studies } from "@/data/studies";
 import { PageShell } from "@/components/layout/PageShell";
+import { routing } from "@/i18n/routing";
 
 type StudyPageProps = {
   params: Promise<{
+    locale: string;
     slug: string;
   }>;
 };
 
 export function generateStaticParams() {
-  return studies.map((study) => ({
-    slug: study.slug,
-  }));
+  return routing.locales.flatMap((locale) =>
+    studies.map((study) => ({
+      locale,
+      slug: study.slug,
+    }))
+  );
 }
 
 export async function generateMetadata({
   params,
 }: StudyPageProps): Promise<Metadata> {
-  const { slug } = await params;
+  const { locale, slug } = await params;
+
+  setRequestLocale(locale);
+
   const study = getStudyBySlug(slug);
 
   if (!study) {
@@ -36,7 +45,10 @@ export async function generateMetadata({
 }
 
 export default async function StudyPage({ params }: StudyPageProps) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
+
+  setRequestLocale(locale);
+
   const study = getStudyBySlug(slug);
 
   if (!study) {
