@@ -1,4 +1,5 @@
 import { AppHeader } from "@/components/layout/AppHeader";
+import { AppFooter } from "./AppFooter";
 
 type PageShellProps = {
   children: React.ReactNode;
@@ -15,6 +16,7 @@ export function PageShell({ children }: PageShellProps) {
       <div className="relative z-10">
         <AppHeader />
         {children}
+        <AppFooter/>
       </div>
     </main>
   );
