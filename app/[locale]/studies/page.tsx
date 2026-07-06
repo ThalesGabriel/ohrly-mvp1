@@ -1,0 +1,754 @@
+"use client";
+
+import Link from "next/link";
+import { useMemo, useState, type ElementType } from "react";
+import {
+    Activity,
+    ArrowRight,
+    BarChart3,
+    BookOpen,
+    CheckCircle2,
+    CircleHelp,
+    Clock3,
+    FlaskConical,
+    GraduationCap,
+    Headphones,
+    Layers3,
+    LibraryBig,
+    MessageSquareWarning,
+    Newspaper,
+    Search,
+    ShoppingCart,
+    Signal,
+    Sparkles,
+    Workflow,
+} from "lucide-react";
+import { PageShell } from "@/components/layout/PageShell";
+
+type StudyCategory =
+    | "Todos"
+    | "Fundamentos"
+    | "Atendimento e CX"
+    | "E-commerce"
+    | "Educação"
+    | "Operações internas"
+    | "Estudos de mercado"
+    | "Laboratório";
+
+type StudyStatus = "published" | "new" | "in_production";
+
+type Study = {
+    title: string;
+    description: string;
+    category: Exclude<StudyCategory, "Todos">;
+    type: string;
+    readingTime: string;
+    href: string;
+    tags: string[];
+    icon: ElementType;
+    accentClass: string;
+    visualClass: string;
+    status?: StudyStatus;
+};
+
+const categoryFilters: {
+    label: StudyCategory;
+    icon: ElementType;
+}[] = [
+        { label: "Todos", icon: LibraryBig },
+        { label: "Fundamentos", icon: Activity },
+        { label: "Atendimento e CX", icon: Headphones },
+        { label: "E-commerce", icon: ShoppingCart },
+        { label: "Educação", icon: GraduationCap },
+        { label: "Operações internas", icon: Workflow },
+        { label: "Estudos de mercado", icon: Layers3 },
+        { label: "Laboratório", icon: FlaskConical },
+    ];
+
+const trails = [
+    {
+        title: "Fundamentos",
+        description:
+            "Conceitos centrais sobre saúde da sua loja digital, sinais vitais, janelas de atenção e perda de consistência.",
+        icon: Activity,
+        href: "#lista",
+        items: [
+            "O que é saúde da sua loja digital?",
+            "O que são sinais vitais de um fluxo?",
+            "Quando esperar deixa de ser neutro?",
+        ],
+    },
+    {
+        title: "Fluxos críticos",
+        description:
+            "Análises aplicadas a atendimento, vendas, checkout, entrega, cobrança, onboarding e suporte.",
+        icon: Workflow,
+        href: "#lista",
+        items: [
+            "Quando um atendimento funciona, mas deixa de resolver.",
+            "Quando o checkout continua ativo, mas perde consistência.",
+            "Quando a cobrança só aparece depois da urgência.",
+        ],
+    },
+    {
+        title: "Estudos de mercado",
+        description:
+            "Leituras sobre empresas, plataformas e modelos que ajudam a explicar como categorias de gestão são criadas.",
+        icon: Layers3,
+        href: "#lista",
+        items: [
+            "O que o V4 ensina sobre vender gestão.",
+            "Por que empresas compram métodos.",
+            "Como transformar diagnóstico em produto recorrente.",
+        ],
+    },
+    {
+        title: "Laboratório Ohrly",
+        description:
+            "Simulações com dados sintéticos para mostrar como o Ohrly interpretaria fluxos parecidos com uma operação real.",
+        icon: FlaskConical,
+        href: "/laboratorio",
+        items: [
+            "Simulação de atendimento via chatbot.",
+            "Simulação de checkout e pagamento.",
+            "Simulação de matrícula e atendimento escolar.",
+        ],
+    },
+];
+
+const featuredStudy: Study = {
+    title: "Sua operação pode estar funcionando e ainda assim não estar saudável",
+    description:
+        "O estudo fundador do Ohrly sobre saúde da sua loja digital: por que nem todo problema começa quando algo quebra, e como fluxos críticos podem perder consistência antes de qualquer alerta evidente.",
+    category: "Fundamentos",
+    type: "Estudo fundador",
+    readingTime: "8 min de leitura",
+    href: "/studies/sua-operacao-pode-estar-funcionando",
+    tags: ["Fundamentos", "Saúde da sua loja digital", "Método Ohrly"],
+    icon: Activity,
+    accentClass: "text-teal-800 bg-teal-50 border-teal-100",
+    visualClass: "from-[#004653] to-[#06183d]",
+    status: "new",
+};
+
+const studies: Study[] = [
+    featuredStudy,
+    {
+        title: "O que é saúde da sua loja digital?",
+        description:
+            "Uma introdução à categoria que o Ohrly propõe: acompanhar fluxos críticos como organismos vivos, com sinais, sintomas e recuperação.",
+        category: "Fundamentos",
+        type: "Conceito",
+        readingTime: "6 min de leitura",
+        href: "/studies/o-que-e-saude-da-sua-loja-digital",
+        tags: ["Saúde da sua loja digital", "Categoria", "Gestão"],
+        icon: Activity,
+        accentClass: "text-teal-800 bg-teal-50 border-teal-100",
+        visualClass: "from-teal-700 to-cyan-900",
+        status: "new",
+    },
+    {
+        title: "O que são sinais vitais de um fluxo?",
+        description:
+            "Tempo, fila, recontato, handoff, abandono, resolução e recorrência: como sinais intermediários revelam a saúde de um fluxo.",
+        category: "Fundamentos",
+        type: "Método",
+        readingTime: "7 min de leitura",
+        href: "/studies/sinais-vitais-de-um-fluxo",
+        tags: ["Sinais vitais", "Fluxos", "Métricas"],
+        icon: Signal,
+        accentClass: "text-cyan-800 bg-cyan-50 border-cyan-100",
+        visualClass: "from-cyan-700 to-slate-900",
+    },
+    {
+        title: "Quando esperar deixa de ser neutro?",
+        description:
+            "A janela mais importante da operação nem sempre é o incidente. Muitas vezes é o ponto em que continuar esperando passa a comprar risco.",
+        category: "Fundamentos",
+        type: "Leitura estratégica",
+        readingTime: "7 min de leitura",
+        href: "/studies/quando-esperar-deixa-de-ser-neutro",
+        tags: ["Janelas de decisão", "Risco", "Gestão"],
+        icon: Clock3,
+        accentClass: "text-amber-800 bg-amber-50 border-amber-100",
+        visualClass: "from-amber-600 to-orange-900",
+    },
+    {
+        title: "Por que dashboards mostram números, mas nem sempre mostram saúde?",
+        description:
+            "Dashboards ajudam a acompanhar indicadores, mas nem sempre mostram quando um fluxo começou a perder consistência da sua loja digital.",
+        category: "Fundamentos",
+        type: "Ensaio",
+        readingTime: "9 min de leitura",
+        href: "/studies/dashboards-nem-sempre-mostram-saude",
+        tags: ["Dashboards", "BI", "Interpretação"],
+        icon: BarChart3,
+        accentClass: "text-blue-800 bg-blue-50 border-blue-100",
+        visualClass: "from-blue-700 to-slate-900",
+    },
+    {
+        title: "Quando um atendimento funciona, mas deixa de resolver",
+        description:
+            "Como aumento de recontato, fila, handoff e tempo de resolução podem indicar perda de saúde antes da reclamação aparecer.",
+        category: "Atendimento e CX",
+        type: "Fluxo aplicado",
+        readingTime: "8 min de leitura",
+        href: "/studies/atendimento-funciona-mas-deixa-de-resolver",
+        tags: ["CX", "Atendimento", "Recontato"],
+        icon: Headphones,
+        accentClass: "text-violet-800 bg-violet-50 border-violet-100",
+        visualClass: "from-violet-700 to-slate-950",
+    },
+    {
+        title: "Quando um chatbot começa a transferir demais para humanos",
+        description:
+            "O transbordo para humano pode ser um sinal vital: o fluxo ainda responde, mas perde capacidade de resolver sozinho.",
+        category: "Atendimento e CX",
+        type: "Análise de fluxo",
+        readingTime: "6 min de leitura",
+        href: "/studies/chatbot-transferindo-demais-para-humanos",
+        tags: ["Chatbot", "Handoff", "Atendimento"],
+        icon: MessageSquareWarning,
+        accentClass: "text-rose-800 bg-rose-50 border-rose-100",
+        visualClass: "from-rose-700 to-slate-950",
+    },
+    {
+        title: "Quando o checkout continua ativo, mas perde consistência",
+        description:
+            "Nem toda perda de venda aparece como erro técnico. Às vezes o fluxo funciona, mas começa a gerar mais abandono, tentativa e fricção.",
+        category: "E-commerce",
+        type: "Fluxo aplicado",
+        readingTime: "8 min de leitura",
+        href: "/studies/checkout-funciona-mas-perde-consistencia",
+        tags: ["E-commerce", "Checkout", "Conversão"],
+        icon: ShoppingCart,
+        accentClass: "text-emerald-800 bg-emerald-50 border-emerald-100",
+        visualClass: "from-emerald-700 to-slate-950",
+    },
+    {
+        title: "Como escolas podem acompanhar a saúde dos seus fluxos administrativos",
+        description:
+            "Matrícula, rematrícula, atendimento a responsáveis e solicitações internas também podem ser vistos como fluxos críticos.",
+        category: "Educação",
+        type: "Exploração vertical",
+        readingTime: "7 min de leitura",
+        href: "/studies/escolas-saude-dos-fluxos-administrativos",
+        tags: ["Educação", "Gestão", "Atendimento"],
+        icon: GraduationCap,
+        accentClass: "text-indigo-800 bg-indigo-50 border-indigo-100",
+        visualClass: "from-indigo-700 to-slate-950",
+    },
+    {
+        title: "Quando a cobrança só é percebida depois que vira inadimplência",
+        description:
+            "Sinais de atraso, tentativa, recontato e exceções podem indicar desgaste antes do problema financeiro ficar explícito.",
+        category: "Operações internas",
+        type: "Fluxo aplicado",
+        readingTime: "6 min de leitura",
+        href: "/studies/cobranca-antes-da-inadimplencia",
+        tags: ["Cobrança", "Operação", "Risco"],
+        icon: Workflow,
+        accentClass: "text-slate-800 bg-slate-100 border-slate-200",
+        visualClass: "from-slate-700 to-slate-950",
+    },
+    {
+        title: "O que o V4 ensina sobre vender gestão, não aplicativo",
+        description:
+            "Uma leitura sobre como produtos ganham força quando deixam de ser percebidos como ferramenta e passam a representar uma camada de gestão.",
+        category: "Estudos de mercado",
+        type: "Estudo de mercado",
+        readingTime: "10 min de leitura",
+        href: "/studies/v4-vender-gestao-nao-aplicativo",
+        tags: ["Categoria", "Gestão", "Posicionamento"],
+        icon: Layers3,
+        accentClass: "text-blue-800 bg-blue-50 border-blue-100",
+        visualClass: "from-[#06183d] to-blue-900",
+    },
+    {
+        title: "Por que empresas compram métodos antes de comprar ferramentas",
+        description:
+            "Antes de contratar software, empresas precisam entender a categoria, o método e a decisão que aquela solução melhora.",
+        category: "Estudos de mercado",
+        type: "Estratégia",
+        readingTime: "8 min de leitura",
+        href: "/studies/empresas-compram-metodos-antes-de-ferramentas",
+        tags: ["Método", "Produto", "Compra B2B"],
+        icon: BookOpen,
+        accentClass: "text-fuchsia-800 bg-fuchsia-50 border-fuchsia-100",
+        visualClass: "from-fuchsia-700 to-slate-950",
+    },
+    {
+        title: "Simulação de atendimento via chatbot",
+        description:
+            "Veja como uma leitura Ohrly poderia interpretar aumento de handoff, recontato e perda de resolução automática.",
+        category: "Laboratório",
+        type: "Simulação",
+        readingTime: "Interativo",
+        href: "/laboratorio/atendimento-chatbot",
+        tags: ["Laboratório", "Chatbot", "Handoff"],
+        icon: FlaskConical,
+        accentClass: "text-teal-800 bg-teal-50 border-teal-100",
+        visualClass: "from-teal-700 to-slate-950",
+    },
+];
+
+export default function StudiesPage() {
+    const [selectedCategory, setSelectedCategory] =
+        useState<StudyCategory>("Todos");
+
+    const filteredStudies = useMemo(() => {
+        if (selectedCategory === "Todos") {
+            return studies;
+        }
+
+        return studies.filter((study) => study.category === selectedCategory);
+    }, [selectedCategory]);
+
+    return (
+        <PageShell>
+            <main className="min-h-screen bg-[#f7fafc] text-slate-950">
+                <section className="mx-auto max-w-7xl px-6 pb-10 pt-10 lg:px-8 lg:pt-16">
+                    <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+                        <div>
+                            <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-teal-100 bg-teal-50 px-3 py-1 text-sm font-semibold text-teal-900">
+                                <Newspaper className="h-4 w-4" />
+                                Como estimamos a saúde da sua loja digital
+                            </p>
+
+                            <h1 className="max-w-3xl text-2xl font-semibold tracking-[-0.045em] text-[#06183d] md:text-3xl">
+                                Estudos sobre operações que funcionam, mas começam a perder saúde
+                            </h1>
+
+                            <p className="mt-6 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
+                                Leituras, análises e simulações sobre fluxos críticos que
+                                acumulam sinais de perda de consistência antes de virar fila,
+                                reclamação, retrabalho ou queda de resultado.
+                            </p>
+
+                            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                                <Link
+                                    href="#lista"
+                                    className="inline-flex h-12 items-center justify-center rounded-xl bg-[#004653] px-6 text-sm font-semibold text-white shadow-lg shadow-teal-900/10 transition hover:bg-[#003844]"
+                                >
+                                    Explorar estudos
+                                </Link>
+
+                                <Link
+                                    href="/diagnostic"
+                                    className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-[#06183d] shadow-sm transition hover:border-teal-700"
+                                >
+                                    Avaliar um fluxo crítico
+                                    <ArrowRight className="h-4 w-4" />
+                                </Link>
+                            </div>
+                        </div>
+
+                        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                                <HeroMetric
+                                    value="4"
+                                    label="trilhas de estudo"
+                                    icon={LibraryBig}
+                                />
+                                <HeroMetric value="12+" label="leituras iniciais" icon={BookOpen} />
+                                <HeroMetric
+                                    value="3"
+                                    label="próximos passos possíveis"
+                                    icon={ArrowRight}
+                                />
+                            </div>
+
+                            <div className="mt-6 rounded-2xl border border-cyan-100 bg-cyan-50 p-5">
+                                <p className="text-sm font-semibold text-[#06183d]">
+                                    Conteúdos para gestores, CX, operações, produto e liderança.
+                                </p>
+                                <p className="mt-2 text-sm leading-6 text-slate-600">
+                                    A página de estudos é a biblioteca viva do Método Ohrly:
+                                    conceitos, exemplos e simulações para reconhecer quando um
+                                    fluxo ainda funciona, mas já não está tão saudável.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section className="mx-auto max-w-7xl px-6 py-8 lg:px-8">
+                    <FeaturedStudyCard study={featuredStudy} />
+                </section>
+
+                <section className="mx-auto max-w-7xl px-6 py-8 lg:px-8">
+                    <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+                        <div>
+                            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-teal-800">
+                                Trilhas
+                            </p>
+                            <h2 className="mt-2 text-3xl font-semibold tracking-tight text-[#06183d]">
+                                Explore por trilha
+                            </h2>
+                        </div>
+
+                        <p className="max-w-xl text-sm leading-6 text-slate-600">
+                            Cada trilha organiza um tipo de aprendizado: conceitos,
+                            aplicações práticas, estudos de mercado e simulações.
+                        </p>
+                    </div>
+
+                    <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+                        {trails.map((trail) => (
+                            <TrailCard key={trail.title} trail={trail} />
+                        ))}
+                    </div>
+                </section>
+
+                <section id="lista" className="mx-auto max-w-7xl px-6 py-8 lg:px-8">
+                    <div className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                        <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
+                            <div>
+                                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-teal-800">
+                                    Biblioteca
+                                </p>
+                                <h2 className="mt-2 text-3xl font-semibold tracking-tight text-[#06183d]">
+                                    Todos os estudos
+                                </h2>
+                            </div>
+
+                            <div className="relative w-full lg:max-w-sm">
+                                <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                                <div className="h-12 rounded-2xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm font-bold text-slate-400">
+                                    Busca em breve
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="mt-6 flex gap-2 overflow-x-auto pb-1">
+                            {categoryFilters.map((filter) => {
+                                const Icon = filter.icon;
+                                const isSelected = selectedCategory === filter.label;
+
+                                return (
+                                    <button
+                                        key={filter.label}
+                                        type="button"
+                                        onClick={() => setSelectedCategory(filter.label)}
+                                        className={[
+                                            "inline-flex min-w-fit items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold transition",
+                                            isSelected
+                                                ? "border-teal-700 bg-teal-50 text-teal-900"
+                                                : "border-slate-200 bg-white text-slate-600 hover:border-teal-300 hover:bg-teal-50/40",
+                                        ].join(" ")}
+                                    >
+                                        <Icon className="h-4 w-4" />
+                                        {filter.label}
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                            {filteredStudies.map((study) => (
+                                <StudyCard key={study.href} study={study} />
+                            ))}
+                        </div>
+                    </div>
+                </section>
+
+                <section className="mx-auto max-w-7xl px-6 pb-12 pt-8 lg:px-8">
+                    <div className="relative overflow-hidden rounded-[2rem] bg-[#004653] p-8 text-white shadow-xl shadow-teal-950/10 md:p-12">
+                        <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/10" />
+                        <div className="absolute bottom-8 right-20 h-24 w-24 rounded-full bg-cyan-300/10" />
+
+                        <div className="relative z-10 grid grid-cols-1 items-center gap-8 lg:grid-cols-[1fr_auto]">
+                            <div>
+                                <p className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-sm font-semibold text-white">
+                                    <CircleHelp className="h-4 w-4" />
+                                    Não sabe por onde começar?
+                                </p>
+
+                                <h2 className="max-w-2xl text-3xl font-semibold tracking-tight md:text-4xl">
+                                    Quer saber se um fluxo da sua operação deveria ser acompanhado?
+                                </h2>
+
+                                <p className="mt-4 max-w-2xl text-sm leading-6 text-white/80 md:text-base">
+                                    Responda algumas perguntas simples e veja se um fluxo crítico
+                                    tem sinais, recorrência e impacto suficientes para se
+                                    beneficiar do acompanhamento pelo Ohrly.
+                                </p>
+                            </div>
+
+                            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+                                <Link
+                                    href="/avaliador"
+                                    className="inline-flex h-13 items-center justify-center gap-2 rounded-xl bg-white px-6 py-4 text-sm font-semibold text-[#004653] shadow-lg transition hover:bg-slate-100"
+                                >
+                                    Avaliar meu fluxo
+                                    <ArrowRight className="h-4 w-4" />
+                                </Link>
+
+                                <Link
+                                    href="/contato"
+                                    className="inline-flex h-13 items-center justify-center rounded-xl border border-white/20 bg-white/10 px-6 py-4 text-sm font-semibold text-white transition hover:bg-white/15"
+                                >
+                                    Solicitar check-up
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </PageShell>
+    );
+}
+
+function HeroMetric({
+    value,
+    label,
+    icon: Icon,
+}: {
+    value: string;
+    label: string;
+    icon: ElementType;
+}) {
+    return (
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <Icon className="h-5 w-5 text-teal-800" />
+            <p className="mt-3 text-2xl font-semibold text-[#06183d]">{value}</p>
+            <p className="mt-1 text-xs font-bold text-slate-500">{label}</p>
+        </div>
+    );
+}
+
+function StudyStatusBadge({ status }: { status?: StudyStatus }) {
+    if (!status || status === "published") {
+        return null;
+    }
+
+    if (status === "new") {
+        return (
+            <span className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                <Sparkles className="h-3.5 w-3.5" />
+                Novo
+            </span>
+        );
+    }
+
+    return (
+        <span className="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+            <Clock3 className="h-3.5 w-3.5" />
+            Em produção
+        </span>
+    );
+
+}
+
+function FeaturedStudyCard({ study }: { study: Study }) {
+    const Icon = study.icon;
+
+    return (
+        <article className="grid grid-cols-1 overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm lg:grid-cols-[0.95fr_1.05fr]">
+            <div className={`relative min-h-[280px] bg-gradient-to-br ${study.visualClass} p-8 text-white`}>
+                <div className="absolute -right-14 -top-14 h-48 w-48 rounded-full bg-white/10" />
+                <div className="absolute bottom-8 right-8 h-24 w-24 rounded-full bg-cyan-300/10" />
+
+                <div className="relative z-10 flex h-full flex-col justify-between">
+                    <div>
+                        <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-sm font-semibold">
+                            {study.type}
+                        </span>
+
+                        <div className="mt-10 flex h-20 w-20 items-center justify-center rounded-3xl bg-white/10">
+                            <Icon className="h-10 w-10" />
+                        </div>
+                    </div>
+
+                    <p className="mt-10 max-w-sm text-sm leading-6 text-white/75">
+                        Toda operação tem sinais vitais. O problema é que muitos deles
+                        mudam antes de qualquer indicador final parecer grave.
+                    </p>
+                </div>
+            </div>
+
+            <div className="p-6 sm:p-8 lg:p-10">
+                <div className="flex flex-wrap gap-2">
+                    <StudyStatusBadge status={study.status} />
+
+                    {study.tags.map((tag) => (
+                        <span
+                            key={tag}
+                            className="rounded-full border border-teal-100 bg-teal-50 px-3 py-1 text-xs font-semibold text-teal-900"
+                        >
+                            {tag}
+                        </span>
+                    ))}
+                </div>
+
+                <h2 className="mt-6 max-w-2xl text-3xl font-semibold tracking-tight text-[#06183d] md:text-4xl">
+                    {study.title}
+                </h2>
+
+                <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600 md:text-base">
+                    {study.description}
+                </p>
+
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                    {study.status === "new" ? (
+                        <Link
+                            href={study.href}
+                            className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[#004653] px-6 text-sm font-semibold text-white shadow-lg shadow-teal-900/10 transition hover:bg-[#003844]"
+                        >
+                            Ler estudo
+                            <ArrowRight className="h-4 w-4" />
+                        </Link>
+                    ) : (
+                        <button
+                            type="button"
+                            disabled
+                            className="inline-flex h-12 cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-slate-200 px-6 text-sm font-semibold text-slate-500"
+                        >
+                            Em produção
+                        </button>
+                    )}
+
+                    <span className="inline-flex items-center gap-2 text-sm font-bold text-slate-500">
+                        <Clock3 className="h-4 w-4" />
+                        {study.readingTime}
+                    </span>
+                </div>
+            </div>
+        </article>
+    );
+}
+
+function TrailCard({
+    trail,
+}: {
+    trail: {
+        title: string;
+        description: string;
+        icon: ElementType;
+        href: string;
+        items: string[];
+    };
+}) {
+    const Icon = trail.icon;
+
+    return (
+        <Link
+            href={trail.href}
+            className="group rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-teal-200 hover:shadow-xl hover:shadow-slate-900/5"
+        >
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-50 text-teal-800 transition group-hover:bg-teal-700 group-hover:text-white">
+                <Icon className="h-7 w-7" />
+            </div>
+
+            <h3 className="mt-5 text-xl font-semibold text-[#06183d]">{trail.title}</h3>
+
+            <p className="mt-3 text-sm leading-6 text-slate-600">
+                {trail.description}
+            </p>
+
+            <ul className="mt-5 space-y-3">
+                {trail.items.map((item) => (
+                    <li key={item} className="flex gap-2 text-xs leading-5 text-slate-600">
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-teal-700" />
+                        <span>{item}</span>
+                    </li>
+                ))}
+            </ul>
+
+            <span className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-teal-800">
+                Explorar trilha
+                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+            </span>
+        </Link>
+    );
+}
+
+function StudyCard({ study }: { study: Study }) {
+    const Icon = study.icon;
+
+    return (
+        <article className="group flex h-full flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:border-teal-200 hover:shadow-xl hover:shadow-slate-900/5">
+            <div className={`relative h-40 bg-gradient-to-br ${study.visualClass} p-5 text-white`}>
+                <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-white/10" />
+
+                <div className="relative z-10 flex h-full flex-col justify-between">
+                    <div className="flex items-center justify-between gap-4">
+                        <div className="flex flex-wrap gap-2">
+                            <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold">
+                                {study.type}
+                            </span>
+
+                            {study.status === "new" && (
+                                <span className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 text-xs font-semibold text-emerald-700">
+                                    <Sparkles className="h-3.5 w-3.5" />
+                                    Novo
+                                </span>
+                            )}
+
+                            {study.status === "in_production" && (
+                                <span className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 text-xs font-semibold text-amber-700">
+                                    <Clock3 className="h-3.5 w-3.5" />
+                                    Em produção
+                                </span>
+                            )}
+                        </div>
+
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white/10">
+                            <Icon className="h-6 w-6" />
+                        </div>
+                    </div>
+
+                    <span className="text-xs font-bold text-white/70">
+                        {study.readingTime}
+                    </span>
+                </div>
+            </div>
+
+            <div className="flex flex-1 flex-col p-6">
+                <span
+                    className={[
+                        "mb-4 inline-flex w-fit rounded-full border px-3 py-1 text-xs font-semibold",
+                        study.accentClass,
+                    ].join(" ")}
+                >
+                    {study.category}
+                </span>
+
+                <h3 className="text-lg font-semibold leading-6 text-[#06183d]">
+                    {study.title}
+                </h3>
+
+                <p className="mt-3 flex-1 text-sm leading-6 text-slate-600">
+                    {study.description}
+                </p>
+
+                <div className="mt-5 flex flex-wrap gap-2">
+                    {study.tags.slice(0, 3).map((tag) => (
+                        <span
+                            key={tag}
+                            className="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-bold text-slate-500"
+                        >
+                            {tag}
+                        </span>
+                    ))}
+                </div>
+
+                {study.status === "new" ? (
+                    <Link
+                        href={study.href}
+                        className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-teal-800"
+                    >
+                        Ler estudo
+                        <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                    </Link>
+
+                ) : (
+                    <span className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-slate-400">
+                        Em produção
+                        <Clock3 className="h-4 w-4" />
+                    </span>
+                )}
+            </div>
+        </article>
+    );
+}

@@ -1,0 +1,637 @@
+{
+  "nav": {
+    "home": "Início",
+    "simulations": "Simular gargalos",
+    "request": "Solicitar análise",
+    "reports": "Exemplos"
+  },
+  "syntheticRequest": {
+    "meta": {
+      "formspreeSubject": "Nova solicitação de interpretação sintética - Ohrly"
+    },
+    "hero": {
+      "badge": "Solicitação guiada",
+      "title": "Solicite uma análise de fluxo digital.",
+      "description": "Descreva um fluxo crítico e receba uma leitura sintética sobre sinais de gargalo, handoff, atraso, retrabalho ou perda de consistência da sua loja digital.",
+      "securityNote": "Sem dados sensíveis no primeiro contato."
+    },
+    "steps": {
+      "describeFlow": "Descreva o fluxo",
+      "indicateSignals": "Indique os sinais",
+      "receiveReport": "Receba o relatório"
+    },
+    "signals": {
+      "approvalTimeGrowth": "Tempo de aprovação subindo",
+      "retryGrowth": "Aumento de retries",
+      "completionDrop": "Queda de conclusão",
+      "humanHandoffGrowth": "Mais handoff humano",
+      "unresolvedMessages": "Mensagens sem resolução",
+      "slowRecovery": "Recuperação mais lenta",
+      "intermediateQueue": "Acúmulo em etapa intermediária"
+    },
+    "defaultFields": {
+      "orderId": {
+        "name": "order_id",
+        "role": "Identificar cada pedido no fluxo"
+      },
+      "paymentApprovedAt": {
+        "name": "payment_approved_at",
+        "role": "Medir tempo até aprovação"
+      },
+      "paymentMethod": {
+        "name": "payment_method",
+        "role": "Comparar comportamento por contexto"
+      }
+    },
+    "form": {
+      "title": "Conte um pouco sobre o fluxo",
+      "description": "Não precisa enviar base real. Descreva o fluxo, os sinais esperados e os campos que ajudariam a simulação.",
+      "flowName": "Nome do fluxo",
+      "flowNamePlaceholder": "Ex.: Checkout com aprovação lenta",
+      "descriptionLabel": "Descrição",
+      "descriptionPlaceholder": "Descreva o fluxo, as etapas principais e o que acontece hoje.",
+      "affectedContext": "Contexto afetado",
+      "affectedContextPlaceholder": "Ex.: Pix + Mobile, WhatsApp + novos clientes",
+      "simulationGoal": "Objetivo da simulação",
+      "simulationGoalPlaceholder": "Qual decisão você espera apoiar com essa leitura? Ex.: entender se vale investigar aprovação Pix no mobile antes de pedir dados reais.",
+      "signalsTitle": "Quais sinais você gostaria de simular?",
+      "signalsDescription": "Selecione os sinais que fazem sentido para seu fluxo.",
+      "fieldsTitle": "Campos que podem ser importantes",
+      "fieldsDescription": "Liste os principais campos que ajudam a entender o comportamento do fluxo e explique brevemente o papel de cada um.",
+      "fieldColumn": "Campo",
+      "fieldRoleColumn": "Papel na simulação",
+      "fieldNamePlaceholder": "Ex.: order_id",
+      "fieldRolePlaceholder": "Ex.: Identificar cada pedido no fluxo",
+      "removeFieldAria": "Remover campo",
+      "addField": "Adicionar campo",
+      "emailSectionTitle": "Para onde enviamos o relatório?",
+      "email": "E-mail",
+      "emailPlaceholder": "voce@empresa.com",
+      "syntheticDisclaimer": "Esta solicitação usa dados sintéticos gerados pelo Ohrly. Não analisamos nem diagnosticamos sua operação real nesse primeiro contato.",
+      "successMessage": "Solicitação enviada com sucesso. Vamos preparar a interpretação sintética e enviar o relatório por e-mail.",
+      "errorMessage": "Não foi possível enviar sua solicitação agora. Tente novamente em alguns instantes.",
+      "submit": "Solicitar interpretação",
+      "submitting": "Enviando...",
+      "viewExample": "Ver exemplo pronto"
+    },
+    "sidePanel": {
+      "title": "O que você vai receber",
+      "benefits": {
+        "syntheticReading": {
+          "title": "Leitura sintética do fluxo",
+          "description": "Uma análise clara do comportamento simulado do seu fluxo."
+        },
+        "observableSignals": {
+          "title": "Sinais observáveis e contexto afetado",
+          "description": "Os sinais mais relevantes e os contextos que mais influenciam o resultado."
+        },
+        "operationalState": {
+          "title": "Hipótese de estado da sua loja digital",
+          "description": "Uma hipótese objetiva sobre o estado da sua loja digital com base nos sinais."
+        },
+        "emailReport": {
+          "title": "Relatório enviado por e-mail",
+          "description": "Um relatório completo e pronto para compartilhar com o time."
+        }
+      },
+      "idealTitle": "Ideal para começar sem dataset real",
+      "idealItems": {
+        "describeFlow": "Você descreve o fluxo",
+        "generateSyntheticData": "O Ohrly gera dados sintéticos",
+        "receiveByEmail": "Você recebe a leitura por e-mail"
+      }
+    },
+    "outputPreview": {
+      "label": "Exemplo de saída",
+      "title": "Checkout com aprovação lenta",
+      "description": "A simulação sugere atenção da sua loja digital em Pix + Mobile, com pressão crescente de recuperação.",
+      "stateLabel": "Estado",
+      "stateValue": "Atenção",
+      "rpiLabel": "RPI",
+      "contextLabel": "Contexto",
+      "contextValue": "Pix + Mobile",
+      "normal": "Normal",
+      "attention": "Atenção",
+      "degradation": "Degradação"
+    },
+    "process": {
+      "items": {
+        "youDescribe": {
+          "title": "Você descreve:",
+          "description": "o fluxo e o contexto"
+        },
+        "ohrlySimulates": {
+          "title": "Ohrly simula:",
+          "description": "comportamento e sinais"
+        },
+        "youReceive": {
+          "title": "Você recebe:",
+          "description": "uma leitura orientada à decisão"
+        }
+      },
+      "closing": "Nosso objetivo é tornar o problema legível antes de pedir dados reais."
+    }
+  },
+  "home": {
+    "hero": {
+      "badge": "Gargalos em fluxos digitais",
+      "title": "Identifique gargalos em fluxos digitais antes que virem retrabalho.",
+      "description": "O Ohrly mostra quando atendimento, checkout, pagamento ou cobrança continuam funcionando, mas já acumulam atraso, handoff, fila, reclamação ou perda da sua loja digital.",
+      "supportingText": "Transforme sinais silenciosos de degradação em uma janela clara de decisão antes que esperar fique caro demais.",
+      "cta": "Ver exemplos de gargalos",
+      "securityNote": "Comece por exemplos sintéticos ou solicite uma análise sem enviar dados sensíveis no primeiro contato.",
+      "previewState": "Atenção da sua loja digital",
+      "previewRpiLabel": "RPI",
+      "previewContextLabel": "Contexto",
+      "previewContext": "Pix + Mobile",
+      "secondaryCta": "Ver caso do boleto"
+    },
+    "audience": {
+      "title": "Isso pode ser para você se...",
+      "description": "você tem diversos fluxos que evoluem constantemente e quer que eles mantenham consistência ao longo dessas mudanças",
+      "items": {
+        "checkout": "Checkout",
+        "payment": "Pagamento",
+        "support": "Atendimento",
+        "delivery": "Entrega"
+      }
+    },
+    "examples": {
+      "title": "Exemplos de gargalos antes do impacto explícito",
+      "description": "Veja como o Ohrly transforma sinais como handoff, atraso, fila e falha recorrente em leituras de decisão.",
+      "selectedReading": "Leitura do exemplo",
+      "selectedButton": "Leitura selecionada",
+      "viewReading": "Ver leitura",
+      "adaptExample": "Adaptar este exemplo",
+      "whyItMatters": "Por que importa:",
+      "rpiComposition": {
+        "title": "Composição do RPI",
+        "description": "O índice combina sinais que ajudam a estimar a pressão de recuperação do fluxo.",
+        "tooltip": "O RPI não é uma probabilidade de incidente. Ele estima quanta pressão o fluxo acumula para voltar ao comportamento esperado.",
+        "persistence": {
+          "label": "Persistência",
+          "tooltip": "Mede por quanto tempo o sinal ficou fora do comportamento esperado. Quanto mais tempo persiste, menos parece ruído."
+        },
+        "magnitude": {
+          "label": "Magnitude",
+          "tooltip": "Mede o quanto o comportamento se afastou do esperado. Um desvio pequeno e persistente tem peso diferente de um desvio muito intenso."
+        },
+        "propagation": {
+          "label": "Propagação",
+          "tooltip": "Mede se o sinal está isolado ou começando a afetar outras etapas, métricas ou contextos do fluxo."
+        }
+      },
+      "metrics": {
+        "state": "Estado",
+        "recoveryPressure": "Pressão de recuperação",
+        "context": "Contexto",
+        "stateTooltip": "Quando um fluxo ainda funciona, mas já apresenta sinais persistentes de piora que merecem acompanhamento.",
+        "rpiTooltip": "Índice que estima quanta pressão o fluxo está acumulando para voltar ao comportamento esperado."
+      },
+      "items": {
+        "checkoutSlowApproval": {
+          "title": "Checkout com aprovação lenta",
+          "domain": "Exemplo sintético de e-commerce",
+          "description": "O pagamento continua funcionando, mas o tempo até confirmação começa a subir.",
+          "summary": "O fluxo ainda funciona, mas apresenta ruído da sua loja digital persistente no contexto Pix + Mobile.",
+          "context": "Pix + Mobile",
+          "state": "Atenção da sua loja digital",
+          "persistenceLabel": "4 dias",
+          "persistenceLevel": "Alta",
+          "persistenceDescription": "O sinal persistiu por tempo suficiente para deixar de parecer uma oscilação pontual.",
+          "magnitudeLabel": "1,8x",
+          "magnitudeLevel": "Moderada",
+          "magnitudeDescription": "O tempo de aprovação ficou acima do comportamento esperado para esse contexto.",
+          "propagationLabel": "Inicial",
+          "propagationLevel": "Baixa",
+          "propagationDescription": "O sinal ainda está concentrado, mas começa a aparecer em retries de pagamento.",
+          "whyItMatters": "Quando esse tipo de sinal persiste, a operação pode começar a acumular retries, abandono, retrabalho ou perda de eficiência antes de qualquer incidente explícito."
+        },
+        "botHandoffGrowth": {
+          "title": "Bot com handoff crescente",
+          "domain": "Exemplo sintético de atendimento",
+          "description": "O atendimento automatizado responde, mas cada vez mais sessões vão para humano.",
+          "summary": "O bot continua respondendo, mas apresenta aumento persistente de transferência para humano no contexto WhatsApp + novos clientes.",
+          "context": "WhatsApp + novos clientes",
+          "state": "Atenção da sua loja digital",
+          "persistenceLabel": "5 dias",
+          "persistenceLevel": "Alta",
+          "persistenceDescription": "O aumento de handoff apareceu de forma repetida por vários dias consecutivos.",
+          "magnitudeLabel": "+22%",
+          "magnitudeLevel": "Moderada",
+          "magnitudeDescription": "A taxa de transferência para humano ficou acima do comportamento esperado.",
+          "propagationLabel": "Inicial",
+          "propagationLevel": "Moderada",
+          "propagationDescription": "O aumento de handoff começa a afetar tempo de resolução e fila humana.",
+          "whyItMatters": "Quando o handoff cresce em silêncio, a operação humana pode começar a absorver custo antes que o SLA ou o volume total deixem o problema evidente."
+        },
+        "deliverySlowRecovery": {
+          "title": "Entrega com recuperação lenta",
+          "domain": "Exemplo sintético de logística",
+          "description": "Os pedidos ainda são entregues, mas o fluxo demora mais para voltar ao normal.",
+          "summary": "A operação ainda conclui entregas, mas apresenta recuperação lenta no contexto Sellers médios + Nordeste.",
+          "context": "Sellers médios + Nordeste",
+          "state": "Degradação sustentada",
+          "persistenceLabel": "7 dias",
+          "persistenceLevel": "Muito alta",
+          "persistenceDescription": "O comportamento ficou fora do esperado por mais tempo que o ciclo natural de recuperação.",
+          "magnitudeLabel": "2,4x",
+          "magnitudeLevel": "Alta",
+          "magnitudeDescription": "O tempo de recuperação ficou muito acima do padrão esperado para esse tipo de entrega.",
+          "propagationLabel": "Espalhando",
+          "propagationLevel": "Alta",
+          "propagationDescription": "O atraso começa a afetar pedidos em risco, fila da sua loja digital e previsibilidade de entrega.",
+          "whyItMatters": "Quando a recuperação fica lenta, a operação pode normalizar atrasos, acumular pedidos em risco e perder capacidade de voltar ao comportamento esperado."
+        },
+        "billingRecurringFailures": {
+          "title": "Billing com falhas recorrentes",
+          "domain": "Exemplo sintético de SaaS B2B",
+          "description": "As cobranças ainda rodam, mas a recuperação fica instável.",
+          "summary": "As cobranças continuam sendo processadas, mas a recuperação após falhas apresenta instabilidade no contexto Plano Pro + contas médias.",
+          "context": "Plano Pro + contas médias",
+          "state": "Atenção da sua loja digital",
+          "persistenceLabel": "3 dias",
+          "persistenceLevel": "Moderada",
+          "persistenceDescription": "As falhas se repetem por alguns ciclos, mas ainda não dominam o comportamento do fluxo.",
+          "magnitudeLabel": "+18%",
+          "magnitudeLevel": "Moderada",
+          "magnitudeDescription": "As falhas de retentativa cresceram em relação ao comportamento esperado.",
+          "propagationLabel": "Localizada",
+          "propagationLevel": "Baixa",
+          "propagationDescription": "O problema ainda parece concentrado no fluxo de retentativa de cobrança.",
+          "whyItMatters": "Quando falhas de cobrança se tornam recorrentes, o impacto pode aparecer antes como esforço de recuperação, contas em risco e perda de eficiência da sua loja digital."
+        }
+      }
+    },
+    "comparison": {
+      "badge": "Complementar ao que você já monitora",
+      "title": "Não é mais um painel de infraestrutura.",
+      "description": "O Ohrly não tenta substituir APM, BI ou dashboards. Ele entra no espaço entre sinais técnicos e decisão da sua loja digital.",
+      "apm": {
+        "eyebrow": "APM",
+        "title": "Vê a infraestrutura",
+        "description": "Serviço, API, latência, erro e disponibilidade."
+      },
+      "bi": {
+        "eyebrow": "BI",
+        "title": "Vê o resultado",
+        "description": "Conversão, receita, volume, meta e indicadores finais."
+      },
+      "ohrly": {
+        "eyebrow": "Ohrly",
+        "title": "Lê o comportamento do fluxo",
+        "description": "Mostra se checkout, pagamento, atendimento ou entrega ainda estão funcionando bem para o negócio.",
+        "questionLabel": "Pergunta que responde",
+        "question": "“O fluxo ainda está funcionando como deveria?”"
+      },
+      "closing": {
+        "part1": "A pergunta não é só",
+        "systemOnline": "“o sistema está no ar?”",
+        "part2": "ou",
+        "resultDropped": "“o resultado caiu?”",
+        "part3": "É",
+        "flowHealthy": "“o fluxo ainda está funcionando bem para o negócio?”"
+      }
+    }
+  },
+  "guidedDemo": {
+    "hero": {
+      "badge": "Demonstração guiada",
+      "title": "Simule gargalos em fluxos digitais.",
+      "description": "Escolha um fluxo de checkout, atendimento, entrega ou cobrança e veja como o Ohrly interpreta sinais de degradação antes do impacto ficar explícito.",
+      "securityNote": "Sem integração. Sem dados reais no primeiro contato."
+    },
+    "nav": {
+      "howItWorks": "Como funciona",
+      "examples": "Exemplos",
+      "observability": "Observabilidade",
+      "login": "Login",
+      "enterLab": "Entrar no Lab"
+    },
+    "steps": {
+      "chooseExample": "Escolha um exemplo",
+      "quickAdjust": "Ajuste rapidamente",
+      "seeReading": "Veja a leitura"
+    },
+    "sections": {
+      "chooseExample": "1. Escolha um exemplo",
+      "quickAdjust": "2. Ajuste rapidamente",
+      "seeReading": "3. Veja a leitura"
+    },
+    "controls": {
+      "duration": "Duração",
+      "recovery": "Recuperação",
+      "propagation": "Propagação",
+      "durationOptions": {
+        "twoDays": "2 dias",
+        "fourDays": "4 dias",
+        "sevenDays": "7 dias"
+      },
+      "recoveryOptions": {
+        "normal": "Normal",
+        "slow": "Lenta",
+        "fragile": "Frágil"
+      },
+      "propagationOptions": {
+        "localized": "Localizada",
+        "initial": "Inicial",
+        "spreading": "Espalhando"
+      }
+    },
+    "reading": {
+      "selectedExample": "Exemplo selecionado",
+      "summaryPrefix": "O fluxo ainda funciona, mas apresenta",
+      "metrics": {
+        "state": "Estado",
+        "recoveryPressure": "Pressão de recuperação",
+        "context": "Contexto"
+      },
+      "rpiHelp": "Índice que estima quanta pressão o fluxo está acumulando para voltar ao comportamento esperado.",
+      "timeline": {
+        "normal": "Normal",
+        "attention": "Atenção",
+        "degradation": "Degradação"
+      },
+      "whyItMatters": "Por que importa:",
+      "observableSignals": "Sinais observáveis",
+      "adaptExample": "Adaptar este exemplo"
+    },
+    "readingStates": {
+      "normal": "Normal",
+      "attention": "Atenção",
+      "degradation": "Degradação"
+    },
+    "examples": {
+      "checkout": {
+        "title": "Checkout com aprovação lenta",
+        "shortDescription": "O pagamento continua funcionando, mas o tempo até confirmação começa a subir.",
+        "selectedContext": "Pix + Mobile",
+        "scenario": "ruído da sua loja digital persistente no contexto Pix + Mobile",
+        "stateLabel": "Atenção da sua loja digital",
+        "stateHelp": "Quando um fluxo ainda funciona, mas já apresenta sinais persistentes de piora que merecem acompanhamento.",
+        "whyItMatters": "Quando esse tipo de sinal persiste, a operação pode começar a acumular retries, abandono, retrabalho ou perda de eficiência antes de qualquer incidente explícito.",
+        "signals": {
+          "approvalTime": "Tempo até aprovação",
+          "retries": "Retries",
+          "abandonment": "Abandono",
+          "exposedValue": "Valor exposto"
+        }
+      },
+      "bot": {
+        "title": "Bot com handoff crescente",
+        "shortDescription": "Cada vez mais sessões precisam de atendimento humano.",
+        "selectedContext": "WhatsApp + novos clientes",
+        "scenario": "pressão crescente de handoff no WhatsApp para novos clientes",
+        "stateLabel": "Atenção da sua loja digital",
+        "stateHelp": "Quando o fluxo automatizado ainda responde, mas começa a exigir mais apoio humano de forma persistente.",
+        "whyItMatters": "Esse sinal pode aumentar custo de atendimento, pressionar filas humanas e mascarar perda de eficiência no fluxo automatizado antes de qualquer incidente formal.",
+        "signals": {
+          "handoff": "Handoff",
+          "fallback": "Fallback",
+          "resolutionTime": "Tempo de resolução",
+          "unresolvedSessions": "Sessões sem resolução"
+        }
+      },
+      "delivery": {
+        "title": "Entrega com recuperação lenta",
+        "shortDescription": "Os pedidos ainda são entregues, mas o fluxo demora mais para voltar ao normal.",
+        "selectedContext": "Sellers médios + Nordeste",
+        "scenario": "recuperação mais lenta em sellers médios no Nordeste",
+        "stateLabel": "Degradação provável",
+        "stateHelp": "Quando o fluxo continua executando, mas passa tempo demais fora do comportamento esperado.",
+        "whyItMatters": "Atrasos que parecem isolados podem começar a consumir a janela de recuperação da operação, aumentar suporte e reduzir previsibilidade para o cliente.",
+        "signals": {
+          "shippingTime": "Tempo até envio",
+          "delay": "Atraso",
+          "atRiskOrders": "Pedidos em risco",
+          "exposedValue": "Valor exposto"
+        }
+      },
+      "billing": {
+        "title": "Billing com falhas recorrentes",
+        "shortDescription": "A recuperação de cobrança começa a ficar instável.",
+        "selectedContext": "Plano Pro + contas médias",
+        "scenario": "falhas recorrentes de recuperação em contas médias do plano Pro",
+        "stateLabel": "Atenção da sua loja digital",
+        "stateHelp": "Quando a recuperação ainda funciona, mas passa a depender de mais tentativas e perde previsibilidade.",
+        "whyItMatters": "Falhas recorrentes de cobrança podem parecer pequenas no início, mas acumulam risco de receita, esforço manual e perda de confiança no processo de recuperação.",
+        "signals": {
+          "billingFailures": "Falhas de cobrança",
+          "retries": "Retries",
+          "timeToRecover": "Tempo até recuperar",
+          "exposedRevenue": "Receita exposta"
+        }
+      }
+    },
+    "comparison": {
+      "title": "Ohrly não começa com infraestrutura. Começa pelo fluxo.",
+      "apm": {
+        "title": "APM vê:",
+        "description": "serviço e erro"
+      },
+      "bi": {
+        "title": "BI vê:",
+        "description": "resultado"
+      },
+      "ohrly": {
+        "title": "Ohrly vê:",
+        "description": "o fluxo perdendo eficiência"
+      },
+      "closing": "A pergunta não é só se o sistema está no ar. É se o fluxo ainda está funcionando bem para o negócio."
+    }
+  },
+  "reports": {
+    "badge": "Acervo público",
+    "title": "Exemplos de gargalos e degradações em fluxos digitais",
+    "description": "Explore leituras públicas do Ohrly sobre fluxos que ainda funcionam, mas começaram a acumular atraso, handoff, fila, retrabalho ou perda da sua loja digital.",
+    "searchPlaceholder": "Buscar por fluxo, domínio ou sinal...",
+    "publishedCount": "Mais de 40 leituras sintéticas publicadas",
+    "rpiPrefix": "RPI",
+    "publishedAt": "Publicado em {date}",
+    "viewReport": "Ver exemplo",
+    "items": {
+      "retencaoBoletoConversacional": {
+        "title": "Retenção em fluxo de boleto conversacional",
+        "domain": "Atendimento conversacional",
+        "summary": "A queda de retenção não apareceu isolada. Ela veio acompanhada de falhas de boleto, handoff humano, maior tempo de atendimento e reclamações.",
+        "state": "Degradação sustentada",
+        "context": "Chatbot + atendimento humano"
+      },
+      "checkoutAprovacaoLenta": {
+        "title": "Checkout com aprovação lenta",
+        "domain": "E-commerce",
+        "summary": "O pagamento continua funcionando, mas o tempo até confirmação começa a subir no contexto Pix + Mobile.",
+        "state": "Atenção da sua loja digital",
+        "context": "Pix + Mobile"
+      }
+    }
+  },
+  "reportDetail": {
+    "backToLibrary": "Voltar para o acervo",
+    "sections": {
+      "oneSentence": "Em uma frase",
+      "whyItMatters": "Por que isso importa",
+      "behaviorTimeline": "Linha do tempo do comportamento",
+      "connectedSignals": "Sinais conectados",
+      "mainEvidence": "Evidências principais",
+      "request": "O que foi solicitado",
+      "interpretation": "Como o Ohrly interpretou",
+      "fieldsAndSignals": "Campos e sinais considerados"
+    },
+    "summaryCards": {
+      "state": "Estado",
+      "rpi": "RPI",
+      "context": "Contexto",
+      "simulatedPeriod": "Período simulado"
+    },
+    "timeline": {
+      "criticalWindow": "Janela crítica: fim de fev – início de mar",
+      "rpi": "RPI"
+    },
+    "signals": {
+      "main": "Sinal principal",
+      "associated": "Sinal associado"
+    },
+    "request": {
+      "flowName": "Nome do fluxo",
+      "objective": "Objetivo",
+      "affectedContext": "Contexto afetado"
+    },
+    "fieldsAndSignals": {
+      "fields": "Campos considerados",
+      "signals": "Sinais interpretados"
+    },
+    "cta": {
+      "title": "Teste o Ohrly com um fluxo próprio",
+      "description": "Veja como dados sintéticos ou reais podem virar uma leitura clara, conectada e acionável.",
+      "button": "Solicitar interpretação com dados sintéticos"
+    },
+    "reports": {
+      "retencao-boleto-conversacional": {
+        "title": "Retenção em fluxo de boleto conversacional",
+        "domain": "Atendimento conversacional",
+        "badges": {
+          "publicReport": "Relatório público",
+          "syntheticData": "Dados sintéticos",
+          "domain": "Atendimento conversacional"
+        },
+        "summary": "A queda de retenção não apareceu isolada. No cenário sintético, ela veio acompanhada de falhas de boleto, handoff humano, maior tempo de atendimento e reclamações.",
+        "disclaimer": "Esta leitura usa dados sintéticos e tem caráter demonstrativo. Ela mostra como o Ohrly interpretaria um fluxo semelhante caso tivesse acesso a dados históricos reais.",
+        "state": "Degradação sustentada",
+        "rpiLabel": "Pressão alta",
+        "context": "Chatbot + atendimento humano",
+        "period": "Jan–Mar/2025",
+        "oneSentence": "O fluxo continuava funcionando, mas vários sinais ficaram pressionados ao mesmo tempo: retenção, falha de boleto, handoff humano, tempo de atendimento, resolução total e reclamações.",
+        "whyItMatters": "Quando a retenção cai junto com falhas de boleto, handoff e reclamações, o problema deixa de parecer apenas uma métrica de conversão. Ele começa a parecer um gargalo da sua loja digital se espalhando pelo fluxo.",
+        "timeline": {
+          "normal": {
+            "label": "Normal",
+            "date": "Jan"
+          },
+          "variation": {
+            "label": "Variação",
+            "date": "Início de fev"
+          },
+          "attention": {
+            "label": "Atenção",
+            "date": "Meados de fev"
+          },
+          "degradation": {
+            "label": "Degradação sustentada",
+            "date": "Mar"
+          }
+        },
+        "signals": {
+          "main": "Retenção no autoatendimento caiu",
+          "associated": {
+            "boletoFailure": "Falha de boleto subiu",
+            "humanHandoff": "Handoff humano subiu",
+            "serviceTime": "Tempo de atendimento subiu",
+            "totalResolution": "Resolução total caiu",
+            "complaints": "Reclamações subiram"
+          }
+        },
+        "evidence": {
+          "outOfExpected": "sinais saíram do comportamento esperado",
+          "sustainedStates": "estados de degradação sustentada",
+          "simultaneousSignals": "sinais pressionados simultaneamente na principal janela"
+        },
+        "requested": {
+          "flowName": "Retenção em fluxo de boleto",
+          "objective": "Entender se variações de retenção poderiam estar associadas a falhas de boleto, handoff humano, tempo de atendimento, resolução final e reclamações.",
+          "affectedContext": "Canal conversacional / chatbot / atendimento humano"
+        },
+        "interpretation": "O Ohrly criou uma base sintética para representar o fluxo descrito, simulou sinais comportamentais e analisou se eles apareciam isolados ou conectados ao longo do tempo.",
+        "interpretedSignals": {
+          "retention": "retenção",
+          "boletoFailure": "falha de boleto",
+          "handoff": "handoff",
+          "humanTime": "tempo humano",
+          "totalResolution": "resolução total",
+          "complaints": "reclamações"
+        }
+      },
+      "checkout-aprovacao-lenta": {
+        "title": "Checkout com aprovação lenta",
+        "domain": "E-commerce",
+        "badges": {
+          "publicReport": "Relatório público",
+          "syntheticData": "Dados sintéticos",
+          "domain": "E-commerce"
+        },
+        "summary": "O pagamento continua funcionando, mas o tempo até confirmação começa a subir no contexto Pix + Mobile.",
+        "disclaimer": "Esta leitura usa dados sintéticos e tem caráter demonstrativo. Ela mostra como o Ohrly interpretaria um fluxo semelhante caso tivesse acesso a dados históricos reais.",
+        "state": "Atenção da sua loja digital",
+        "rpiLabel": "Pressão moderada/alta",
+        "context": "Pix + Mobile",
+        "period": "Últimos 7 dias simulados",
+        "oneSentence": "O fluxo ainda conclui pagamentos, mas o tempo até aprovação ficou pressionado por tempo suficiente para deixar de parecer apenas oscilação normal.",
+        "whyItMatters": "Quando a aprovação começa a demorar em um contexto específico, a operação pode acumular retries, abandono e perda de eficiência antes de qualquer incidente explícito.",
+        "timeline": {
+          "normal": {
+            "label": "Normal",
+            "date": "Dia 1"
+          },
+          "variation": {
+            "label": "Variação",
+            "date": "Dia 2"
+          },
+          "attention": {
+            "label": "Atenção",
+            "date": "Dia 4"
+          },
+          "observation": {
+            "label": "Observação",
+            "date": "Dia 7"
+          }
+        },
+        "signals": {
+          "main": "Tempo até aprovação subiu",
+          "associated": {
+            "retries": "Retries começaram a subir",
+            "mobileCompletion": "Conclusão mobile oscilou",
+            "exposedValue": "Valor exposto aumentou",
+            "pixContext": "Contexto Pix concentrou o sinal"
+          }
+        },
+        "evidence": {
+          "persistentSignal": "de sinal persistente no cenário sintético",
+          "aboveExpected": "acima do comportamento esperado",
+          "observableSignals": "sinais observáveis associados"
+        },
+        "requested": {
+          "flowName": "Checkout com aprovação lenta",
+          "objective": "Simular se um aumento gradual no tempo de aprovação poderia indicar ruído da sua loja digital antes da queda explícita de conversão.",
+          "affectedContext": "Pix + Mobile"
+        },
+        "interpretation": "O Ohrly gerou um cenário sintético para o fluxo de checkout, simulou aprovação mais lenta em Pix + Mobile e analisou persistência, pressão de recuperação e sinais associados.",
+        "interpretedSignals": {
+          "approvalTime": "tempo até aprovação",
+          "retries": "retries",
+          "abandonment": "abandono",
+          "exposedValue": "valor exposto"
+        }
+      }
+    }
+  }
+}
