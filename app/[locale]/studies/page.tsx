@@ -102,18 +102,6 @@ const trails = [
             "Como transformar diagnóstico em produto recorrente.",
         ],
     },
-    {
-        title: "Laboratório Ohrly",
-        description:
-            "Simulações com dados sintéticos para mostrar como o Ohrly interpretaria fluxos parecidos com uma operação real.",
-        icon: FlaskConical,
-        href: "/laboratorio",
-        items: [
-            "Simulação de atendimento via chatbot.",
-            "Simulação de checkout e pagamento.",
-            "Simulação de matrícula e atendimento escolar.",
-        ],
-    },
 ];
 
 const featuredStudy: Study = {
@@ -126,8 +114,8 @@ const featuredStudy: Study = {
     href: "/studies/sua-operacao-pode-estar-funcionando",
     tags: ["Fundamentos", "Saúde da sua loja digital", "Método Ohrly"],
     icon: Activity,
-    accentClass: "text-teal-800 bg-teal-50 border-teal-100",
-    visualClass: "from-[#004653] to-[#06183d]",
+    accentClass: "text-violet-800 bg-violet-50 border-violet-100",
+    visualClass: "from-violet-700 to-violet-800",
     status: "new",
 };
 
@@ -143,8 +131,8 @@ const studies: Study[] = [
         href: "/studies/o-que-e-saude-da-sua-loja-digital",
         tags: ["Saúde da sua loja digital", "Categoria", "Gestão"],
         icon: Activity,
-        accentClass: "text-teal-800 bg-teal-50 border-teal-100",
-        visualClass: "from-teal-700 to-cyan-900",
+        accentClass: "text-violet-800 bg-violet-50 border-violet-100",
+        visualClass: "from-violet-700 to-violet-900",
         status: "new",
     },
     {
@@ -157,8 +145,8 @@ const studies: Study[] = [
         href: "/studies/sinais-vitais-de-um-fluxo",
         tags: ["Sinais vitais", "Fluxos", "Métricas"],
         icon: Signal,
-        accentClass: "text-cyan-800 bg-cyan-50 border-cyan-100",
-        visualClass: "from-cyan-700 to-slate-900",
+        accentClass: "text-violet-800 bg-violet-50 border-violet-100",
+        visualClass: "from-violet-700 to-slate-900",
     },
     {
         title: "Quando esperar deixa de ser neutro?",
@@ -222,8 +210,8 @@ const studies: Study[] = [
         href: "/studies/checkout-funciona-mas-perde-consistencia",
         tags: ["E-commerce", "Checkout", "Conversão"],
         icon: ShoppingCart,
-        accentClass: "text-emerald-800 bg-emerald-50 border-emerald-100",
-        visualClass: "from-emerald-700 to-slate-950",
+        accentClass: "text-violet-800 bg-violet-50 border-violet-100",
+        visualClass: "from-violet-700 to-slate-950",
     },
     {
         title: "Como escolas podem acompanhar a saúde dos seus fluxos administrativos",
@@ -262,7 +250,7 @@ const studies: Study[] = [
         tags: ["Categoria", "Gestão", "Posicionamento"],
         icon: Layers3,
         accentClass: "text-blue-800 bg-blue-50 border-blue-100",
-        visualClass: "from-[#06183d] to-blue-900",
+        visualClass: "from-violet-800 to-blue-900",
     },
     {
         title: "Por que empresas compram métodos antes de comprar ferramentas",
@@ -276,19 +264,6 @@ const studies: Study[] = [
         icon: BookOpen,
         accentClass: "text-fuchsia-800 bg-fuchsia-50 border-fuchsia-100",
         visualClass: "from-fuchsia-700 to-slate-950",
-    },
-    {
-        title: "Simulação de atendimento via chatbot",
-        description:
-            "Veja como uma leitura Ohrly poderia interpretar aumento de handoff, recontato e perda de resolução automática.",
-        category: "Laboratório",
-        type: "Simulação",
-        readingTime: "Interativo",
-        href: "/laboratorio/atendimento-chatbot",
-        tags: ["Laboratório", "Chatbot", "Handoff"],
-        icon: FlaskConical,
-        accentClass: "text-teal-800 bg-teal-50 border-teal-100",
-        visualClass: "from-teal-700 to-slate-950",
     },
 ];
 
@@ -310,12 +285,12 @@ export default function StudiesPage() {
                 <section className="mx-auto max-w-7xl px-6 pb-10 pt-10 lg:px-8 lg:pt-16">
                     <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
                         <div>
-                            <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-teal-100 bg-teal-50 px-3 py-1 text-sm font-semibold text-teal-900">
+                            <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-violet-100 bg-violet-50 px-3 py-1 text-sm font-semibold text-violet-900">
                                 <Newspaper className="h-4 w-4" />
                                 Como estimamos a saúde da sua loja digital
                             </p>
 
-                            <h1 className="max-w-3xl text-2xl font-semibold tracking-[-0.045em] text-[#06183d] md:text-3xl">
+                            <h1 className="max-w-3xl text-2xl font-semibold tracking-[-0.045em] text-violet-800 md:text-3xl">
                                 Estudos sobre operações que funcionam, mas começam a perder saúde
                             </h1>
 
@@ -328,14 +303,14 @@ export default function StudiesPage() {
                             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                                 <Link
                                     href="#lista"
-                                    className="inline-flex h-12 items-center justify-center rounded-xl bg-[#004653] px-6 text-sm font-semibold text-white shadow-lg shadow-teal-900/10 transition hover:bg-[#003844]"
+                                    className="inline-flex h-12 items-center justify-center rounded-xl bg-violet-700 px-6 text-sm font-semibold text-white shadow-lg shadow-violet-900/10 transition hover:bg-violet-800"
                                 >
                                     Explorar estudos
                                 </Link>
 
                                 <Link
                                     href="/diagnostic"
-                                    className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-[#06183d] shadow-sm transition hover:border-teal-700"
+                                    className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-violet-800 shadow-sm transition hover:border-violet-700"
                                 >
                                     Avaliar um fluxo crítico
                                     <ArrowRight className="h-4 w-4" />
@@ -358,8 +333,8 @@ export default function StudiesPage() {
                                 />
                             </div>
 
-                            <div className="mt-6 rounded-2xl border border-cyan-100 bg-cyan-50 p-5">
-                                <p className="text-sm font-semibold text-[#06183d]">
+                            <div className="mt-6 rounded-2xl border border-violet-100 bg-violet-50 p-5">
+                                <p className="text-sm font-semibold text-violet-800">
                                     Conteúdos para gestores, CX, operações, produto e liderança.
                                 </p>
                                 <p className="mt-2 text-sm leading-6 text-slate-600">
@@ -379,10 +354,10 @@ export default function StudiesPage() {
                 <section className="mx-auto max-w-7xl px-6 py-8 lg:px-8">
                     <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
                         <div>
-                            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-teal-800">
+                            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-violet-800">
                                 Trilhas
                             </p>
-                            <h2 className="mt-2 text-3xl font-semibold tracking-tight text-[#06183d]">
+                            <h2 className="mt-2 text-3xl font-semibold tracking-tight text-violet-800">
                                 Explore por trilha
                             </h2>
                         </div>
@@ -393,7 +368,7 @@ export default function StudiesPage() {
                         </p>
                     </div>
 
-                    <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+                    <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
                         {trails.map((trail) => (
                             <TrailCard key={trail.title} trail={trail} />
                         ))}
@@ -404,10 +379,10 @@ export default function StudiesPage() {
                     <div className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
                         <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
                             <div>
-                                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-teal-800">
+                                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-violet-800">
                                     Biblioteca
                                 </p>
-                                <h2 className="mt-2 text-3xl font-semibold tracking-tight text-[#06183d]">
+                                <h2 className="mt-2 text-3xl font-semibold tracking-tight text-violet-800">
                                     Todos os estudos
                                 </h2>
                             </div>
@@ -433,8 +408,8 @@ export default function StudiesPage() {
                                         className={[
                                             "inline-flex min-w-fit items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold transition",
                                             isSelected
-                                                ? "border-teal-700 bg-teal-50 text-teal-900"
-                                                : "border-slate-200 bg-white text-slate-600 hover:border-teal-300 hover:bg-teal-50/40",
+                                                ? "border-violet-700 bg-violet-50 text-violet-900"
+                                                : "border-slate-200 bg-white text-slate-600 hover:border-violet-300 hover:bg-violet-50/40",
                                         ].join(" ")}
                                     >
                                         <Icon className="h-4 w-4" />
@@ -453,9 +428,9 @@ export default function StudiesPage() {
                 </section>
 
                 <section className="mx-auto max-w-7xl px-6 pb-12 pt-8 lg:px-8">
-                    <div className="relative overflow-hidden rounded-[2rem] bg-[#004653] p-8 text-white shadow-xl shadow-teal-950/10 md:p-12">
+                    <div className="relative overflow-hidden rounded-[2rem] bg-violet-700 p-8 text-white shadow-xl shadow-violet-950/10 md:p-12">
                         <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/10" />
-                        <div className="absolute bottom-8 right-20 h-24 w-24 rounded-full bg-cyan-300/10" />
+                        <div className="absolute bottom-8 right-20 h-24 w-24 rounded-full bg-violet-300/10" />
 
                         <div className="relative z-10 grid grid-cols-1 items-center gap-8 lg:grid-cols-[1fr_auto]">
                             <div>
@@ -478,7 +453,7 @@ export default function StudiesPage() {
                             <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
                                 <Link
                                     href="/avaliador"
-                                    className="inline-flex h-13 items-center justify-center gap-2 rounded-xl bg-white px-6 py-4 text-sm font-semibold text-[#004653] shadow-lg transition hover:bg-slate-100"
+                                    className="inline-flex h-13 items-center justify-center gap-2 rounded-xl bg-white px-6 py-4 text-sm font-semibold text-violet-700 shadow-lg transition hover:bg-slate-100"
                                 >
                                     Avaliar meu fluxo
                                     <ArrowRight className="h-4 w-4" />
@@ -510,8 +485,8 @@ function HeroMetric({
 }) {
     return (
         <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-            <Icon className="h-5 w-5 text-teal-800" />
-            <p className="mt-3 text-2xl font-semibold text-[#06183d]">{value}</p>
+            <Icon className="h-5 w-5 text-violet-800" />
+            <p className="mt-3 text-2xl font-semibold text-violet-800">{value}</p>
             <p className="mt-1 text-xs font-bold text-slate-500">{label}</p>
         </div>
     );
@@ -524,7 +499,7 @@ function StudyStatusBadge({ status }: { status?: StudyStatus }) {
 
     if (status === "new") {
         return (
-            <span className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+            <span className="inline-flex items-center gap-1 rounded-full border border-violet-200 bg-violet-50 px-3 py-1 text-xs font-semibold text-violet-700">
                 <Sparkles className="h-3.5 w-3.5" />
                 Novo
             </span>
@@ -547,7 +522,7 @@ function FeaturedStudyCard({ study }: { study: Study }) {
         <article className="grid grid-cols-1 overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm lg:grid-cols-[0.95fr_1.05fr]">
             <div className={`relative min-h-[280px] bg-gradient-to-br ${study.visualClass} p-8 text-white`}>
                 <div className="absolute -right-14 -top-14 h-48 w-48 rounded-full bg-white/10" />
-                <div className="absolute bottom-8 right-8 h-24 w-24 rounded-full bg-cyan-300/10" />
+                <div className="absolute bottom-8 right-8 h-24 w-24 rounded-full bg-violet-300/10" />
 
                 <div className="relative z-10 flex h-full flex-col justify-between">
                     <div>
@@ -574,14 +549,14 @@ function FeaturedStudyCard({ study }: { study: Study }) {
                     {study.tags.map((tag) => (
                         <span
                             key={tag}
-                            className="rounded-full border border-teal-100 bg-teal-50 px-3 py-1 text-xs font-semibold text-teal-900"
+                            className="rounded-full border border-violet-100 bg-violet-50 px-3 py-1 text-xs font-semibold text-violet-900"
                         >
                             {tag}
                         </span>
                     ))}
                 </div>
 
-                <h2 className="mt-6 max-w-2xl text-3xl font-semibold tracking-tight text-[#06183d] md:text-4xl">
+                <h2 className="mt-6 max-w-2xl text-3xl font-semibold tracking-tight text-violet-800 md:text-4xl">
                     {study.title}
                 </h2>
 
@@ -593,7 +568,7 @@ function FeaturedStudyCard({ study }: { study: Study }) {
                     {study.status === "new" ? (
                         <Link
                             href={study.href}
-                            className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[#004653] px-6 text-sm font-semibold text-white shadow-lg shadow-teal-900/10 transition hover:bg-[#003844]"
+                            className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-violet-700 px-6 text-sm font-semibold text-white shadow-lg shadow-violet-900/10 transition hover:bg-violet-800"
                         >
                             Ler estudo
                             <ArrowRight className="h-4 w-4" />
@@ -634,13 +609,13 @@ function TrailCard({
     return (
         <Link
             href={trail.href}
-            className="group rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-teal-200 hover:shadow-xl hover:shadow-slate-900/5"
+            className="group rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-violet-200 hover:shadow-xl hover:shadow-slate-900/5"
         >
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-50 text-teal-800 transition group-hover:bg-teal-700 group-hover:text-white">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-50 text-violet-800 transition group-hover:bg-violet-700 group-hover:text-white">
                 <Icon className="h-7 w-7" />
             </div>
 
-            <h3 className="mt-5 text-xl font-semibold text-[#06183d]">{trail.title}</h3>
+            <h3 className="mt-5 text-xl font-semibold text-violet-800">{trail.title}</h3>
 
             <p className="mt-3 text-sm leading-6 text-slate-600">
                 {trail.description}
@@ -649,13 +624,13 @@ function TrailCard({
             <ul className="mt-5 space-y-3">
                 {trail.items.map((item) => (
                     <li key={item} className="flex gap-2 text-xs leading-5 text-slate-600">
-                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-teal-700" />
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-violet-700" />
                         <span>{item}</span>
                     </li>
                 ))}
             </ul>
 
-            <span className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-teal-800">
+            <span className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-violet-800">
                 Explorar trilha
                 <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
             </span>
@@ -667,7 +642,7 @@ function StudyCard({ study }: { study: Study }) {
     const Icon = study.icon;
 
     return (
-        <article className="group flex h-full flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:border-teal-200 hover:shadow-xl hover:shadow-slate-900/5">
+        <article className="group flex h-full flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:border-violet-200 hover:shadow-xl hover:shadow-slate-900/5">
             <div className={`relative h-40 bg-gradient-to-br ${study.visualClass} p-5 text-white`}>
                 <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-white/10" />
 
@@ -679,7 +654,7 @@ function StudyCard({ study }: { study: Study }) {
                             </span>
 
                             {study.status === "new" && (
-                                <span className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 text-xs font-semibold text-emerald-700">
+                                <span className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 text-xs font-semibold text-violet-700">
                                     <Sparkles className="h-3.5 w-3.5" />
                                     Novo
                                 </span>
@@ -714,7 +689,7 @@ function StudyCard({ study }: { study: Study }) {
                     {study.category}
                 </span>
 
-                <h3 className="text-lg font-semibold leading-6 text-[#06183d]">
+                <h3 className="text-lg font-semibold leading-6 text-violet-800">
                     {study.title}
                 </h3>
 
@@ -736,7 +711,7 @@ function StudyCard({ study }: { study: Study }) {
                 {study.status === "new" ? (
                     <Link
                         href={study.href}
-                        className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-teal-800"
+                        className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-violet-800"
                     >
                         Ler estudo
                         <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />

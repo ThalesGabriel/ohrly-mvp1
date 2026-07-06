@@ -17,7 +17,7 @@ export function V4StudyDetail({ study }: { study: StudyDetail }) {
       <section className="mx-auto max-w-7xl px-6 pb-10 pt-10 lg:px-8 lg:pt-14">
         <Link
           href="/studies"
-          className="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-teal-800 transition hover:text-teal-950"
+          className="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-violet-800 transition hover:text-violet-950"
         >
           <ArrowLeft className="h-4 w-4" />
           Voltar para estudos
@@ -26,7 +26,7 @@ export function V4StudyDetail({ study }: { study: StudyDetail }) {
         <div className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm">
           <div className="relative bg-gradient-to-br from-[#06183d] to-blue-900 p-8 text-white lg:p-12">
             <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-white/10" />
-            <div className="absolute bottom-10 right-20 h-24 w-24 rounded-full bg-cyan-300/10" />
+            <div className="absolute bottom-10 right-20 h-24 w-24 rounded-full bg-violet-300/10" />
 
             <div className="relative z-10 max-w-4xl">
               <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-sm font-semibold">
@@ -67,7 +67,7 @@ export function V4StudyDetail({ study }: { study: StudyDetail }) {
       <section className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-6 py-8 lg:grid-cols-[0.75fr_1.25fr] lg:px-8">
         <aside className="lg:sticky lg:top-24 lg:h-fit">
           <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-teal-800">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-violet-800">
               Tese do estudo
             </p>
 
@@ -82,7 +82,7 @@ export function V4StudyDetail({ study }: { study: StudyDetail }) {
             </p>
           </div>
 
-          <div className="mt-5 rounded-[2rem] border border-cyan-100 bg-cyan-50 p-6">
+          <div className="mt-5 rounded-[2rem] border border-violet-100 bg-violet-50 p-6">
             <h3 className="font-semibold text-[#06183d]">
               Aplicação no Ohrly
             </h3>
@@ -93,7 +93,7 @@ export function V4StudyDetail({ study }: { study: StudyDetail }) {
 
             <Link
               href="/avaliador"
-              className="mt-5 inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#004653] px-4 text-sm font-semibold text-white shadow-lg shadow-teal-900/10 transition hover:bg-[#003844]"
+              className="mt-5 inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#004653] px-4 text-sm font-semibold text-white shadow-lg shadow-violet-900/10 transition hover:bg-[#003844]"
             >
               Avaliar fluxo
               <ArrowRight className="h-4 w-4" />
@@ -120,8 +120,8 @@ export function V4StudyDetail({ study }: { study: StudyDetail }) {
             text="Em vez de explicar o produto como observabilidade comportamental, o Ohrly pode se apresentar como uma plataforma de gestão da saúde da sua loja digital. O método vem antes da tela. O diagnóstico vem antes do dashboard. A decisão vem antes da métrica."
           />
 
-          <div className="rounded-[2rem] border border-teal-100 bg-teal-50 p-6 sm:p-8">
-            <p className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-sm font-semibold text-teal-900">
+          <div className="rounded-[2rem] border border-violet-100 bg-violet-50 p-6 sm:p-8">
+            <p className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-sm font-semibold text-violet-900">
               <Sparkles className="h-4 w-4" />
               Formulação final
             </p>
@@ -150,7 +150,7 @@ function InsightCard({
 }) {
   return (
     <div className="border-t border-slate-200 p-6 lg:border-l lg:border-t-0">
-      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-50 text-teal-800">
+      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-50 text-violet-800">
         <Icon className="h-6 w-6" />
       </div>
 

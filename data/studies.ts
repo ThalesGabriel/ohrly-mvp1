@@ -77,8 +77,8 @@ export const studies: StudyDetail[] = [
     publishedAt: "2026-07-01",
     tags: ["Fundamentos", "Saúde da sua loja digital", "Método Ohrly"],
     icon: Activity,
-    visualClass: "from-[#004653] to-[#06183d]",
-    accentClass: "text-teal-800 bg-teal-50 border-teal-100",
+    accentClass: "text-violet-800 bg-violet-50 border-violet-100",
+    visualClass: "from-violet-700 to-violet-800",
     author: {
       name: "Ohrly",
       role: "Estudos de Saúde da sua loja digital",
