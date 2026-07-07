@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState, type ElementType } from "react";
+import { useEffect, useMemo, useRef, useState, type ElementType } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
     Activity,
     ArrowRight,
@@ -267,17 +268,95 @@ const studies: Study[] = [
     },
 ];
 
+const PAGE_SIZE = 8;
+
 export default function StudiesPage() {
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const tableTopRef = useRef<HTMLDivElement | null>(null);
+
+    const initialPage = Number(searchParams.get("page") || "1");
+
     const [selectedCategory, setSelectedCategory] =
         useState<StudyCategory>("Todos");
+    const [searchQuery, setSearchQuery] = useState("");
+    const [currentPage, setCurrentPage] = useState(
+        Number.isFinite(initialPage) && initialPage > 0 ? initialPage : 1
+    );
 
     const filteredStudies = useMemo(() => {
-        if (selectedCategory === "Todos") {
-            return studies;
+        const query = searchQuery.trim().toLowerCase();
+
+        return studies.filter((study) => {
+            const matchesCategory =
+                selectedCategory === "Todos" || study.category === selectedCategory;
+
+            const matchesSearch =
+                !query ||
+                [
+                    study.title,
+                    study.description,
+                    study.category,
+                    study.type,
+                    ...study.tags,
+                ]
+                    .join(" ")
+                    .toLowerCase()
+                    .includes(query);
+
+            return matchesCategory && matchesSearch;
+        });
+    }, [selectedCategory, searchQuery]);
+
+    const pageCount = Math.max(1, Math.ceil(filteredStudies.length / PAGE_SIZE));
+
+    const paginatedStudies = useMemo(() => {
+        const safePage = Math.min(currentPage, pageCount);
+        const start = (safePage - 1) * PAGE_SIZE;
+
+        return filteredStudies.slice(start, start + PAGE_SIZE);
+    }, [filteredStudies, currentPage, pageCount]);
+
+    function updatePage(page: number) {
+        const nextPage = Math.min(Math.max(page, 1), pageCount);
+
+        setCurrentPage(nextPage);
+
+        const params = new URLSearchParams(searchParams.toString());
+
+        if (nextPage === 1) {
+            params.delete("page");
+        } else {
+            params.set("page", String(nextPage));
         }
 
-        return studies.filter((study) => study.category === selectedCategory);
-    }, [selectedCategory]);
+        const queryString = params.toString();
+
+        router.replace(queryString ? `${pathname}?${queryString}` : pathname, {
+            scroll: false,
+        });
+
+        window.requestAnimationFrame(() => {
+            tableTopRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
+        });
+    }
+
+    useEffect(() => {
+        setCurrentPage(1);
+
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete("page");
+
+        const queryString = params.toString();
+
+        router.replace(queryString ? `${pathname}?${queryString}` : pathname, {
+            scroll: false,
+        });
+    }, [selectedCategory, searchQuery]);
 
     return (
         <PageShell>
@@ -389,9 +468,12 @@ export default function StudiesPage() {
 
                             <div className="relative w-full lg:max-w-sm">
                                 <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                                <div className="h-12 rounded-2xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm font-bold text-slate-400">
-                                    Busca em breve
-                                </div>
+                                <input
+                                    value={searchQuery}
+                                    onChange={(event) => setSearchQuery(event.target.value)}
+                                    placeholder="Buscar estudos..."
+                                    className="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm font-semibold text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-violet-300 focus:bg-white focus:ring-4 focus:ring-violet-100"
+                                />
                             </div>
                         </div>
 
@@ -419,11 +501,15 @@ export default function StudiesPage() {
                             })}
                         </div>
 
-                        <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-                            {filteredStudies.map((study) => (
-                                <StudyCard key={study.href} study={study} />
-                            ))}
-                        </div>
+                        <div ref={tableTopRef} className="scroll-mt-28" />
+                        <StudyTable
+                            studies={paginatedStudies}
+                            totalCount={filteredStudies.length}
+                            currentPage={currentPage}
+                            pageSize={PAGE_SIZE}
+                            pageCount={pageCount}
+                            onPageChange={updatePage}
+                        />
                     </div>
                 </section>
 
@@ -471,6 +557,243 @@ export default function StudiesPage() {
                 </section>
             </main>
         </PageShell>
+    );
+}
+
+function StudyTable({
+    studies,
+    totalCount,
+    currentPage,
+    pageSize,
+    pageCount,
+    onPageChange,
+}: {
+    studies: Study[];
+    totalCount: number;
+    currentPage: number;
+    pageSize: number;
+    pageCount: number;
+    onPageChange: (page: number) => void;
+}) {
+    const router = useRouter();
+
+    const firstItem = totalCount === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+    const lastItem = Math.min(currentPage * pageSize, totalCount);
+
+    function goToPage(page: number) {
+        if (page < 1 || page > pageCount) return;
+        onPageChange(page);
+    }
+
+    if (totalCount === 0) {
+        return (
+            <div className="mt-8 rounded-3xl border border-dashed border-slate-200 bg-slate-50 p-8 text-center">
+                <p className="text-sm font-semibold text-slate-700">
+                    Nenhum estudo encontrado.
+                </p>
+                <p className="mt-2 text-sm text-slate-500">
+                    Tente mudar a categoria ou buscar por outro termo.
+                </p>
+            </div>
+        );
+    }
+
+    return (
+        <div className="mt-8 overflow-hidden rounded-3xl border border-slate-200 bg-white">
+            <div className="overflow-x-auto">
+                <table className="w-full min-w-[860px] border-collapse text-left">
+                    <thead>
+                        <tr className="border-b border-slate-200 bg-slate-50/80 text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
+                            <th className="px-5 py-4">Estudo</th>
+                            <th className="px-5 py-4">Categoria</th>
+                            <th className="px-5 py-4">Tipo</th>
+                            <th className="px-5 py-4">Tempo</th>
+                            <th className="px-5 py-4">Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody className="divide-y divide-slate-100">
+                        {studies.map((study) => {
+                            const Icon = study.icon;
+                            const isAvailable = study.status !== "in_production";
+
+                            return (
+                                <tr
+                                    key={study.href}
+                                    role={isAvailable ? "link" : undefined}
+                                    tabIndex={isAvailable ? 0 : -1}
+                                    onClick={(event) => {
+                                        const target = event.target as HTMLElement;
+
+                                        if (target.closest("a, button")) return;
+                                        if (!isAvailable) return;
+
+                                        router.push(study.href);
+                                    }}
+                                    onKeyDown={(event) => {
+                                        if (!isAvailable) return;
+
+                                        if (event.key === "Enter" || event.key === " ") {
+                                            event.preventDefault();
+                                            router.push(study.href);
+                                        }
+                                    }}
+                                    className={[
+                                        "group transition outline-none",
+                                        isAvailable
+                                            ? "cursor-pointer hover:bg-violet-50/50 focus:bg-violet-50/70"
+                                            : "cursor-default bg-slate-50/40",
+                                    ].join(" ")}
+                                >
+                                    <td className="px-5 py-5">
+                                        <div className="flex items-start gap-4">
+                                            <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-violet-50 text-violet-700 transition group-hover:bg-violet-100">
+                                                <Icon className="h-5 w-5" />
+                                            </div>
+
+                                            <div>
+                                                {isAvailable ? (
+                                                    <Link
+                                                        href={study.href}
+                                                        className="text-sm font-semibold leading-6 text-[#21152f] transition hover:text-violet-700"
+                                                    >
+                                                        {study.title}
+                                                    </Link>
+                                                ) : (
+                                                    <p className="text-sm font-semibold leading-6 text-[#21152f]">
+                                                        {study.title}
+                                                    </p>
+                                                )}
+
+                                                <p className="mt-1 line-clamp-2 max-w-xl text-sm leading-6 text-slate-500">
+                                                    {study.description}
+                                                </p>
+
+                                                <div className="mt-3 flex flex-wrap gap-2">
+                                                    {study.tags.slice(0, 3).map((tag) => (
+                                                        <span
+                                                            key={tag}
+                                                            className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-bold text-slate-500"
+                                                        >
+                                                            {tag}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td className="px-5 py-5 align-top">
+                                        <span className="inline-flex rounded-full border border-violet-100 bg-violet-50 px-3 py-1 text-xs font-semibold text-violet-800">
+                                            {study.category}
+                                        </span>
+                                    </td>
+
+                                    <td className="px-5 py-5 align-top">
+                                        <span className="text-sm font-semibold text-slate-600">
+                                            {study.type}
+                                        </span>
+                                    </td>
+
+                                    <td className="px-5 py-5 align-top">
+                                        <span className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500">
+                                            <Clock3 className="h-4 w-4" />
+                                            {study.readingTime}
+                                        </span>
+                                    </td>
+
+                                    <td className="px-5 py-5 align-top">
+                                        <StudyTableStatusBadge status={study.status} />
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </div>
+
+            <div className="flex flex-col gap-4 border-t border-slate-100 bg-slate-50/70 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm font-semibold text-slate-500">
+                    Mostrando{" "}
+                    <span className="text-slate-800">{firstItem}</span>
+                    {" "}–{" "}
+                    <span className="text-slate-800">{lastItem}</span>
+                    {" "}de{" "}
+                    <span className="text-slate-800">{totalCount}</span>
+                    {" "}estudos
+                </p>
+
+                <div className="flex items-center gap-2">
+                    <button
+                        type="button"
+                        onClick={() => goToPage(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className="inline-flex h-10 items-center justify-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-600 transition hover:border-violet-200 hover:text-violet-800 disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                        Anterior
+                    </button>
+
+                    <div className="flex items-center gap-1">
+                        {Array.from({ length: pageCount }).map((_, index) => {
+                            const page = index + 1;
+                            const isCurrent = page === currentPage;
+
+                            return (
+                                <button
+                                    key={page}
+                                    type="button"
+                                    onClick={() => goToPage(page)}
+                                    className={[
+                                        "cursor-pointer inline-flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold transition",
+                                        isCurrent
+                                            ? "bg-violet-700 text-white shadow-sm shadow-violet-900/15"
+                                            : "border border-slate-200 bg-white text-slate-600 hover:border-violet-200 hover:text-violet-800",
+                                    ].join(" ")}
+                                >
+                                    {page}
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={() => goToPage(currentPage + 1)}
+                        disabled={currentPage === pageCount}
+                        className="cursor-pointer inline-flex h-10 items-center justify-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-600 transition hover:border-violet-200 hover:text-violet-800 disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                        Próxima
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function StudyTableStatusBadge({ status }: { status?: StudyStatus }) {
+    if (status === "new") {
+        return (
+            <span className="inline-flex items-center gap-1 rounded-full border border-violet-200 bg-violet-50 px-3 py-1 text-xs font-semibold text-violet-700">
+                <Sparkles className="h-3.5 w-3.5" />
+                Novo
+            </span>
+        );
+    }
+
+    if (status === "in_production") {
+        return (
+            <span className="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+                <Clock3 className="h-3.5 w-3.5" />
+                Em produção
+            </span>
+        );
+    }
+
+    return (
+        <span className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+            <CheckCircle2 className="h-3.5 w-3.5" />
+            Publicado
+        </span>
     );
 }
 
@@ -635,95 +958,5 @@ function TrailCard({
                 <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
             </span>
         </Link>
-    );
-}
-
-function StudyCard({ study }: { study: Study }) {
-    const Icon = study.icon;
-
-    return (
-        <article className="group flex h-full flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:border-violet-200 hover:shadow-xl hover:shadow-slate-900/5">
-            <div className={`relative h-40 bg-gradient-to-br ${study.visualClass} p-5 text-white`}>
-                <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-white/10" />
-
-                <div className="relative z-10 flex h-full flex-col justify-between">
-                    <div className="flex items-center justify-between gap-4">
-                        <div className="flex flex-wrap gap-2">
-                            <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold">
-                                {study.type}
-                            </span>
-
-                            {study.status === "new" && (
-                                <span className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 text-xs font-semibold text-violet-700">
-                                    <Sparkles className="h-3.5 w-3.5" />
-                                    Novo
-                                </span>
-                            )}
-
-                            {study.status === "in_production" && (
-                                <span className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 text-xs font-semibold text-amber-700">
-                                    <Clock3 className="h-3.5 w-3.5" />
-                                    Em produção
-                                </span>
-                            )}
-                        </div>
-
-                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white/10">
-                            <Icon className="h-6 w-6" />
-                        </div>
-                    </div>
-
-                    <span className="text-xs font-bold text-white/70">
-                        {study.readingTime}
-                    </span>
-                </div>
-            </div>
-
-            <div className="flex flex-1 flex-col p-6">
-                <span
-                    className={[
-                        "mb-4 inline-flex w-fit rounded-full border px-3 py-1 text-xs font-semibold",
-                        study.accentClass,
-                    ].join(" ")}
-                >
-                    {study.category}
-                </span>
-
-                <h3 className="text-lg font-semibold leading-6 text-violet-800">
-                    {study.title}
-                </h3>
-
-                <p className="mt-3 flex-1 text-sm leading-6 text-slate-600">
-                    {study.description}
-                </p>
-
-                <div className="mt-5 flex flex-wrap gap-2">
-                    {study.tags.slice(0, 3).map((tag) => (
-                        <span
-                            key={tag}
-                            className="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-bold text-slate-500"
-                        >
-                            {tag}
-                        </span>
-                    ))}
-                </div>
-
-                {study.status === "new" ? (
-                    <Link
-                        href={study.href}
-                        className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-violet-800"
-                    >
-                        Ler estudo
-                        <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-                    </Link>
-
-                ) : (
-                    <span className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-slate-400">
-                        Em produção
-                        <Clock3 className="h-4 w-4" />
-                    </span>
-                )}
-            </div>
-        </article>
     );
 }

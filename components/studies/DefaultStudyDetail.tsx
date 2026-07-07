@@ -16,14 +16,6 @@ export function DefaultStudyDetail({ study }: { study: StudyDetail }) {
   return (
     <article className="min-h-screen bg-[#f7fafc] text-slate-950">
       <section className="mx-auto max-w-7xl px-6 pb-8 pt-10 lg:px-8 lg:pt-14">
-        <Link
-          href="/studies"
-          className="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-violet-800 transition hover:text-violet-950"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Voltar para estudos
-        </Link>
-
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-stretch">
           <div className={`relative overflow-hidden rounded-[2rem] bg-gradient-to-br ${study.visualClass} p-8 text-white shadow-xl shadow-slate-900/10`}>
             <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-white/10" />
