@@ -278,7 +278,7 @@ export default function CriticalFlowEvaluatorPage() {
         };
     }, [flow, impacts, situations, frequency, signals, dataAccess]);
 
-    const contactHref = `/contato?fluxo=${encodeURIComponent(
+    const contactHref = `/contact?fluxo=${encodeURIComponent(
         flow
     )}&aderencia=${encodeURIComponent(result.level)}&score=${result.total}`;
 
