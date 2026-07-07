@@ -131,7 +131,7 @@ export default function EcommerceBridgePage() {
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <a
-              href="#early-access"
+              href="#contact"
               className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-violet-700 px-6 text-sm font-semibold text-white shadow-lg shadow-violet-900/10 transition hover:bg-violet-800"
             >
               Saiba mais
@@ -352,7 +352,7 @@ export default function EcommerceBridgePage() {
         </div>
       </section>
 
-      <section id="early-access" className="mx-auto grid w-full max-w-7xl gap-8 px-6 py-12 lg:grid-cols-[0.95fr_1.05fr] lg:px-8 lg:py-20">
+      <section id="contact" className="mx-auto grid w-full max-w-7xl gap-8 px-6 py-12 lg:grid-cols-[0.95fr_1.05fr] lg:px-8 lg:py-20">
         <div className="flex flex-col justify-center">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-violet-500">Próximo passo</p>
           <h2 className="mt-3 text-3xl font-semibold tracking-[-0.045em] text-[#21152f] sm:text-5xl">

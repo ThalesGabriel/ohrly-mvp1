@@ -193,7 +193,7 @@ export default function ContactPage() {
             <section className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-10 px-6 py-8 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
                 <aside className="lg:sticky lg:top-24 lg:h-fit">
                     <div className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm">
-                        <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-teal-100 bg-teal-50 px-3 py-1 text-sm font-bold text-teal-900">
+                        <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-violet-100 bg-violet-50 px-3 py-1 text-sm font-bold text-violet-900">
                             <Sparkles className="h-4 w-4" />
                             Check-up da sua loja digital
                         </p>
@@ -221,7 +221,7 @@ export default function ContactPage() {
                                 return (
                                     <div key={step.title} className="flex gap-4">
                                         <div className="relative">
-                                            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-teal-50 text-teal-800">
+                                            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-violet-50 text-violet-800">
                                                 <Icon className="h-5 w-5" />
                                             </div>
 
@@ -250,7 +250,7 @@ export default function ContactPage() {
                         <StepperHeader activeStep={activeStep} progress={progress} />
 
                         <form
-                            action="https://formspree.io/f/SEU_ID_AQUI"
+                            action="https://formspree.io/f/mkoygpnk"
                             method="POST"
                             className="mt-8"
                         >
@@ -373,15 +373,15 @@ export default function ContactPage() {
                                                     className={[
                                                         "flex cursor-pointer items-center gap-3 rounded-2xl border p-4 text-sm font-bold transition",
                                                         selectedSignals.includes(signal)
-                                                            ? "border-teal-700 bg-teal-50 text-[#06183d]"
-                                                            : "border-slate-200 bg-slate-50 text-slate-700 hover:border-teal-300 hover:bg-teal-50/40",
+                                                            ? "border-violet-700 bg-violet-50 text-[#06183d]"
+                                                            : "border-slate-200 bg-slate-50 text-slate-700 hover:border-violet-300 hover:bg-violet-50/40",
                                                     ].join(" ")}
                                                 >
                                                     <input
                                                         type="checkbox"
                                                         checked={selectedSignals.includes(signal)}
                                                         onChange={() => toggleSignal(signal)}
-                                                        className="h-4 w-4 rounded border-slate-300 text-teal-700 focus:ring-teal-700"
+                                                        className="h-4 w-4 rounded border-slate-300 text-violet-700 focus:ring-violet-700"
                                                     />
                                                     {signal}
                                                 </label>
@@ -421,7 +421,7 @@ export default function ContactPage() {
                                         }
                                         rows={6}
                                         placeholder='Exemplo: "Nosso chatbot continua funcionando, mas percebemos mais transbordo para humano e mais recontato nas últimas semanas. Ainda não sabemos se é sazonal ou se o fluxo perdeu eficiência."'
-                                        className="w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm leading-6 text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-teal-600 focus:bg-white focus:ring-4 focus:ring-teal-600/10"
+                                        className="w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm leading-6 text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-violet-600 focus:bg-white focus:ring-4 focus:ring-violet-600/10"
                                     />
 
                                     <div className="mt-6 rounded-3xl border border-slate-200 bg-slate-50 p-5 sm:p-6">
@@ -438,7 +438,7 @@ export default function ContactPage() {
 
                                             <button
                                                 type="submit"
-                                                className="inline-flex h-14 items-center justify-center gap-2 rounded-xl bg-[#004653] px-7 text-sm font-semibold text-white shadow-lg shadow-teal-900/10 transition hover:bg-[#003844]"
+                                                className="inline-flex h-14 items-center justify-center gap-2 rounded-xl bg-violet-700 px-7 text-sm font-semibold text-white shadow-lg shadow-violet-900/10 transition hover:bg-violet-800"
                                             >
                                                 Solicitar check-up da sua loja digital
                                                 <Send className="h-4 w-4" />
@@ -474,7 +474,7 @@ function StepperHeader({
         <div className="border-b border-slate-200 pb-8">
             <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
                 <div>
-                    <p className="text-sm font-semibold text-teal-800">
+                    <p className="text-sm font-semibold text-violet-800">
                         Etapa {activeStep + 1} de {contactSteps.length}
                     </p>
 
@@ -490,7 +490,7 @@ function StepperHeader({
 
             <div className="mt-6 h-2 overflow-hidden rounded-full bg-slate-100">
                 <div
-                    className="h-full rounded-full bg-teal-700 transition-all duration-500"
+                    className="h-full rounded-full bg-violet-700 transition-all duration-500"
                     style={{ width: `${progress}%` }}
                 />
             </div>
@@ -506,9 +506,9 @@ function StepperHeader({
                             className={[
                                 "rounded-2xl border p-3 transition",
                                 isActive
-                                    ? "border-teal-700 bg-teal-50"
+                                    ? "border-violet-700 bg-violet-50"
                                     : isCompleted
-                                        ? "border-teal-100 bg-white"
+                                        ? "border-violet-100 bg-white"
                                         : "border-slate-200 bg-slate-50",
                             ].join(" ")}
                         >
@@ -516,9 +516,9 @@ function StepperHeader({
                                 className={[
                                     "mb-3 flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold",
                                     isCompleted
-                                        ? "bg-teal-700 text-white"
+                                        ? "bg-violet-700 text-white"
                                         : isActive
-                                            ? "bg-teal-100 text-teal-900"
+                                            ? "bg-violet-100 text-violet-900"
                                             : "bg-slate-200 text-slate-500",
                                 ].join(" ")}
                             >
@@ -549,9 +549,9 @@ function StepperHeader({
                             className={[
                                 "flex min-w-fit items-center gap-2 rounded-full border px-3 py-2 text-xs font-semibold",
                                 isActive
-                                    ? "border-teal-700 bg-teal-50 text-teal-900"
+                                    ? "border-violet-700 bg-violet-50 text-violet-900"
                                     : isCompleted
-                                        ? "border-teal-100 bg-white text-teal-800"
+                                        ? "border-violet-100 bg-white text-violet-800"
                                         : "border-slate-200 bg-slate-50 text-slate-400",
                             ].join(" ")}
                         >
@@ -583,7 +583,7 @@ function StepShell({
     return (
         <section>
             <div className="mb-6 flex gap-4">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-teal-50 text-sm font-semibold text-teal-900">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-violet-50 text-sm font-semibold text-violet-900">
                     {number}
                 </span>
 
@@ -619,7 +619,7 @@ function StepActions({
                 <button
                     type="button"
                     onClick={onBack}
-                    className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 transition hover:border-teal-700"
+                    className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 transition hover:border-violet-700"
                 >
                     <ChevronLeft className="h-4 w-4" />
                     Voltar
@@ -634,7 +634,7 @@ function StepActions({
                 type="button"
                 onClick={onBack}
                 disabled={activeStep === 0}
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 transition hover:border-teal-700 disabled:cursor-not-allowed disabled:opacity-40"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 transition hover:border-violet-700 disabled:cursor-not-allowed disabled:opacity-40"
             >
                 <ChevronLeft className="h-4 w-4" />
                 Voltar
@@ -650,7 +650,7 @@ function StepActions({
                 type="button"
                 onClick={onNext}
                 disabled={!isValid}
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[#004653] px-6 text-sm font-semibold text-white shadow-lg shadow-teal-900/10 transition hover:bg-[#003844] disabled:cursor-not-allowed disabled:opacity-40"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-violet-700 px-6 text-sm font-semibold text-white shadow-lg shadow-violet-900/10 transition hover:bg-violet-800 disabled:cursor-not-allowed disabled:opacity-40"
             >
                 Próxima etapa
                 <ArrowRight className="h-4 w-4" />
@@ -694,7 +694,7 @@ function TextField({
                     value={value}
                     onChange={(event) => onChange(event.target.value)}
                     placeholder={placeholder}
-                    className="h-14 w-full rounded-2xl border border-slate-200 bg-slate-50 py-4 pl-11 pr-4 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-teal-600 focus:bg-white focus:ring-4 focus:ring-teal-600/10"
+                    className="h-14 w-full rounded-2xl border border-slate-200 bg-slate-50 py-4 pl-11 pr-4 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-violet-600 focus:bg-white focus:ring-4 focus:ring-violet-600/10"
                 />
             </div>
         </label>
@@ -719,14 +719,14 @@ function SelectableCard({
             className={[
                 "flex items-center gap-4 rounded-2xl border p-4 text-left transition",
                 selected
-                    ? "border-teal-700 bg-teal-50 shadow-sm"
-                    : "border-slate-200 bg-white hover:border-teal-300 hover:bg-teal-50/40",
+                    ? "border-violet-700 bg-violet-50 shadow-sm"
+                    : "border-slate-200 bg-white hover:border-violet-300 hover:bg-violet-50/40",
             ].join(" ")}
         >
             <span
                 className={[
                     "flex h-11 w-11 shrink-0 items-center justify-center rounded-full",
-                    selected ? "bg-teal-700 text-white" : "bg-slate-100 text-slate-600",
+                    selected ? "bg-violet-700 text-white" : "bg-slate-100 text-slate-600",
                 ].join(" ")}
             >
                 <Icon className="h-5 w-5" />
@@ -736,7 +736,7 @@ function SelectableCard({
                 {option.label}
             </span>
 
-            {selected && <CheckCircle2 className="h-5 w-5 text-teal-700" />}
+            {selected && <CheckCircle2 className="h-5 w-5 text-violet-700" />}
         </button>
     );
 }
@@ -757,17 +757,17 @@ function RadioRow({
             className={[
                 "flex w-full items-center gap-4 rounded-2xl border p-4 text-left text-sm font-bold transition",
                 selected
-                    ? "border-teal-700 bg-teal-50 text-[#06183d]"
-                    : "border-slate-200 bg-white text-slate-700 hover:border-teal-300",
+                    ? "border-violet-700 bg-violet-50 text-[#06183d]"
+                    : "border-slate-200 bg-white text-slate-700 hover:border-violet-300",
             ].join(" ")}
         >
             <span
                 className={[
                     "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border",
-                    selected ? "border-teal-700" : "border-slate-300",
+                    selected ? "border-violet-700" : "border-slate-300",
                 ].join(" ")}
             >
-                {selected && <span className="h-2.5 w-2.5 rounded-full bg-teal-700" />}
+                {selected && <span className="h-2.5 w-2.5 rounded-full bg-violet-700" />}
             </span>
             {label}
         </button>

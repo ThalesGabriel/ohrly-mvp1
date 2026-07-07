@@ -57,7 +57,7 @@ export function AppHeader() {
           </Link>
 
           <Link
-            href="/early-access"
+            href="/contact"
             className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-violet-700 px-5 text-sm font-semibold text-white shadow-lg shadow-violet-900/10 transition hover:bg-violet-800"
           >
             Quero saber mais
@@ -99,7 +99,7 @@ export function AppHeader() {
               </Link>
 
               <Link
-                href="/ecommerce#early-access"
+                href="/ecommerce#contact"
                 onClick={() => setIsOpen(false)}
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-violet-700 px-5 text-sm font-semibold text-white shadow-lg shadow-violet-900/10 transition hover:bg-violet-800"
               >
