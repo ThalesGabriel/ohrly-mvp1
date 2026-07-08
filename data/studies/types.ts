@@ -7,15 +7,25 @@ export type StudyCategory =
   | "Estudos de mercado"
   | "Laboratório";
 
+export type StudyStatus = "published" | "new" | "in_production";
+
 export type StudyIconKey =
   | "activity"
   | "barChart"
+  | "bookOpen"
   | "clock"
+  | "flask"
+  | "graduationCap"
   | "headphones"
   | "layers"
+  | "library"
   | "messageWarning"
+  | "newspaper"
+  | "search"
   | "shoppingCart"
-  | "signal";
+  | "signal"
+  | "sparkles"
+  | "workflow";
 
 export type StudyContentBlock =
   | {
@@ -53,6 +63,7 @@ export type StudyDetail = {
   icon: StudyIconKey;
   visualClass: string;
   accentClass: string;
+  status?: StudyStatus;
   author: {
     name: string;
     role: string;

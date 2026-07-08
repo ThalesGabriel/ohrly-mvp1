@@ -1,6 +1,6 @@
 import type { StudyDetail } from "../types";
 
-export const suaOperacaoPodeEstarFuncionando = {
+export const suaOperacaoPodeEstarFuncionando: StudyDetail = {
   slug: "sua-operacao-pode-estar-funcionando",
   title: "Sua operação pode estar funcionando e ainda assim não estar saudável",
   description:
@@ -13,6 +13,7 @@ export const suaOperacaoPodeEstarFuncionando = {
   icon: "activity",
   accentClass: "text-violet-800 bg-violet-50 border-violet-100",
   visualClass: "from-violet-700 to-violet-800",
+  customComponent: "founderStudy",
   author: {
     name: "Ohrly",
     role: "Estudos de Saúde da sua loja digital",
@@ -72,4 +73,4 @@ export const suaOperacaoPodeEstarFuncionando = {
     "sinais-vitais-de-um-fluxo",
     "quando-esperar-deixa-de-ser-neutro",
   ],
-} satisfies StudyDetail;
+};

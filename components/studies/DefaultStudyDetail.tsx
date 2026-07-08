@@ -1,23 +1,26 @@
 import Link from "next/link";
 import {
-  ArrowLeft,
   ArrowRight,
   CalendarDays,
   CheckCircle2,
   Clock3,
   Sparkles,
 } from "lucide-react";
-import { getRelatedStudies, type StudyDetail } from "@/data/studies";
+import { getRelatedStudies } from "@/data/studies";
+import { studyIcons } from "@/data/studies/icons";
+import type { StudyDetail } from "@/data/studies/types";
 
 export function DefaultStudyDetail({ study }: { study: StudyDetail }) {
-  const Icon = study.icon;
+  const Icon = studyIcons[study.icon];
   const relatedStudies = getRelatedStudies(study);
 
   return (
     <article className="min-h-screen bg-[#f7fafc] text-slate-950">
       <section className="mx-auto max-w-7xl px-6 pb-8 pt-10 lg:px-8 lg:pt-14">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-stretch">
-          <div className={`relative overflow-hidden rounded-[2rem] bg-gradient-to-br ${study.visualClass} p-8 text-white shadow-xl shadow-slate-900/10`}>
+          <div
+            className={`relative overflow-hidden rounded-[2rem] bg-gradient-to-br ${study.visualClass} p-8 text-white shadow-xl shadow-slate-900/10`}
+          >
             <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-white/10" />
             <div className="absolute bottom-10 right-12 h-28 w-28 rounded-full bg-violet-300/10" />
 
@@ -34,10 +37,11 @@ export function DefaultStudyDetail({ study }: { study: StudyDetail }) {
 
               <div>
                 <p className="text-sm font-bold text-white/70">
-                  Estudos de Saúde da sua loja digital
+                  {study.author.role}
                 </p>
                 <p className="mt-3 max-w-md text-xl font-semibold leading-7">
-                  Fluxos críticos podem continuar funcionando enquanto perdem consistência.
+                  Fluxos críticos podem continuar funcionando enquanto perdem
+                  consistência.
                 </p>
               </div>
             </div>
@@ -83,7 +87,7 @@ export function DefaultStudyDetail({ study }: { study: StudyDetail }) {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-6 py-8 lg:grid-cols-[280px_1fr] lg:px-8">
+      <section className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-6 py-8 lg:grid-cols-[0.4fr_1fr] lg:px-8">
         <aside className="lg:sticky lg:top-24 lg:h-fit">
           <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-violet-800">
@@ -92,7 +96,10 @@ export function DefaultStudyDetail({ study }: { study: StudyDetail }) {
 
             <ul className="mt-5 space-y-4">
               {study.summary.map((item) => (
-                <li key={item} className="flex gap-3 text-sm leading-6 text-slate-600">
+                <li
+                  key={item}
+                  className="flex gap-3 text-sm leading-6 text-slate-600"
+                >
                   <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-violet-700" />
                   <span>{item}</span>
                 </li>
@@ -104,8 +111,10 @@ export function DefaultStudyDetail({ study }: { study: StudyDetail }) {
             <h3 className="font-semibold text-[#06183d]">
               Quer aplicar isso na sua operação?
             </h3>
+
             <p className="mt-2 text-sm leading-6 text-slate-600">
-              Avalie se um fluxo crítico tem sinais suficientes para ser acompanhado pelo Ohrly.
+              Avalie se um fluxo crítico tem sinais suficientes para ser
+              acompanhado pelo Ohrly.
             </p>
 
             <Link
@@ -121,7 +130,7 @@ export function DefaultStudyDetail({ study }: { study: StudyDetail }) {
         <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8 lg:p-10">
           <div className="prose prose-slate max-w-none prose-headings:text-[#06183d] prose-headings:tracking-tight prose-p:leading-8 prose-p:text-slate-600">
             {study.content.map((block, index) => (
-              <StudyBlock key={index} block={block} />
+              <StudyBlock key={`${block.type}-${index}`} block={block} />
             ))}
           </div>
         </div>
@@ -134,6 +143,7 @@ export function DefaultStudyDetail({ study }: { study: StudyDetail }) {
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-violet-800">
                 Continue lendo
               </p>
+
               <h2 className="mt-2 text-3xl font-semibold tracking-tight text-[#06183d]">
                 Estudos relacionados
               </h2>
@@ -159,22 +169,18 @@ export function DefaultStudyDetail({ study }: { study: StudyDetail }) {
   );
 }
 
-function StudyBlock({
-  block,
-}: {
-  block: StudyDetail["content"][number];
-}) {
+function StudyBlock({ block }: { block: StudyDetail["content"][number] }) {
   if (block.type === "heading") {
-    return <h2>{block.content}</h2>;
+    return <h2 className="mb-2 text-xl font-semibold">{block.content}</h2>;
   }
 
   if (block.type === "paragraph") {
-    return <p>{block.content}</p>;
+    return <p className="my-2">{block.content}</p>;
   }
 
   if (block.type === "quote") {
     return (
-      <blockquote className="rounded-3xl border-l-4 border-violet-700 bg-violet-50 px-6 py-5 text-xl font-semibold leading-8 text-[#06183d]">
+      <blockquote className="my-5 rounded-3xl border-l-4 border-violet-700 bg-violet-50 px-6 py-5 text-xl font-semibold leading-8 text-[#06183d]">
         {block.content}
       </blockquote>
     );
@@ -200,7 +206,9 @@ function StudyBlock({
     return (
       <div className="not-prose my-8 rounded-[2rem] border border-violet-100 bg-violet-50 p-6">
         <h3 className="text-xl font-semibold text-[#06183d]">{block.title}</h3>
-        <p className="mt-3 text-sm leading-7 text-slate-700">{block.content}</p>
+        <p className="mt-3 text-sm leading-7 text-slate-700">
+          {block.content}
+        </p>
       </div>
     );
   }
@@ -209,7 +217,7 @@ function StudyBlock({
 }
 
 function RelatedStudyCard({ study }: { study: StudyDetail }) {
-  const Icon = study.icon;
+  const Icon = studyIcons[study.icon];
 
   return (
     <Link

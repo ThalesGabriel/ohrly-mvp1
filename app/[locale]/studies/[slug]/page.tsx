@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import { DefaultStudyDetail } from "@/components/studies/DefaultStudyDetail";
 import { customStudyComponents } from "@/components/studies/custom";
-import { getStudyBySlug, studies } from "@/data/studies";
 import { PageShell } from "@/components/layout/PageShell";
 import { routing } from "@/i18n/routing";
+import { getStudyBySlug, studies } from "@/data/studies/index";
 
 type StudyPageProps = {
   params: Promise<{
