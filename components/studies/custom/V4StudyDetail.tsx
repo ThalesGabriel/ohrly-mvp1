@@ -9,7 +9,7 @@ import {
   Sparkles,
   Workflow,
 } from "lucide-react";
-import type { StudyDetail } from "@/data/studies";
+import { StudyDetail } from "@/data/studies/types";
 
 export function V4StudyDetail({ study }: { study: StudyDetail }) {
   return (
