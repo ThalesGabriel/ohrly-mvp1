@@ -1,0 +1,40 @@
+import {
+  Activity,
+  BarChart3,
+  BookOpen,
+  Clock3,
+  FlaskConical,
+  GraduationCap,
+  Headphones,
+  Layers3,
+  LibraryBig,
+  MessageSquareWarning,
+  Newspaper,
+  Search,
+  ShoppingCart,
+  Signal,
+  Sparkles,
+  Workflow,
+  type LucideIcon,
+} from "lucide-react";
+
+import type { StudyIconKey } from "./types";
+
+export const studyIcons: Record<StudyIconKey, LucideIcon> = {
+  activity: Activity,
+  barChart: BarChart3,
+  bookOpen: BookOpen,
+  clock: Clock3,
+  flask: FlaskConical,
+  graduationCap: GraduationCap,
+  headphones: Headphones,
+  layers: Layers3,
+  library: LibraryBig,
+  messageWarning: MessageSquareWarning,
+  newspaper: Newspaper,
+  search: Search,
+  shoppingCart: ShoppingCart,
+  signal: Signal,
+  sparkles: Sparkles,
+  workflow: Workflow,
+};
