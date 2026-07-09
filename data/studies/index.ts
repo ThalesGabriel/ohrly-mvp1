@@ -10,6 +10,7 @@ import { atendimentoFuncionaMasDeixaDeResolver } from "./atendimento-cx/atendime
 import { chatbotTransferindoDemaisParaHumanos } from "./atendimento-cx/chatbot-transferindo-demais-para-humanos";
 
 import { checkoutFuncionaMasPerdeConsistencia } from "./ecommerce/checkout-funciona-mas-perde-consistencia";
+import { carrinhoAbandonadoProblemaNoFluxo } from "./ecommerce/carrinho-abandonado-problema-no-fluxo";
 
 import { v4VenderGestaoNaoAplicativo } from "./estudos-de-mercado/v4-vender-gestao-nao-aplicativo";
 
@@ -23,6 +24,7 @@ export const studies: StudyDetail[] = [
   chatbotTransferindoDemaisParaHumanos,
   checkoutFuncionaMasPerdeConsistencia,
   v4VenderGestaoNaoAplicativo,
+  carrinhoAbandonadoProblemaNoFluxo
 ]
 
 export function getStudyBySlug(slug: string): StudyDetail | undefined {
